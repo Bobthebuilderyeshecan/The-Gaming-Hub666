@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Drive - Google Drive</title>
     <link rel="icon" id="favicon" href="https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png">
-    <link rel="preconnect" href="https://www.google.com">
-    <link rel="dns-prefetch" href="https://www.google.com">
     <style>
         :root {
             --bg-primary: #1a1a2e;
@@ -29,6 +27,7 @@
             min-height: 100vh;
         }
 
+        /* TOP BAR */
         .top-bar {
             display: flex;
             align-items: center;
@@ -56,16 +55,18 @@
             color: white;
             font-size: 15px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.3s;
             font-weight: 500;
         }
 
         .top-bar button:hover {
             background-color: var(--accent);
+            color: white;
         }
 
         .top-bar button.active {
             background-color: var(--accent);
+            color: white;
             font-weight: bold;
         }
 
@@ -87,22 +88,12 @@
         #settingsBtn {
             position: absolute;
             right: 30px;
+            background-color: var(--bg-tertiary);
+            padding: 10px 20px;
+            color: white;
         }
 
-        .game-counter {
-            background: var(--bg-secondary);
-            padding: 15px 30px;
-            text-align: center;
-            font-size: 16px;
-            border-bottom: 1px solid var(--bg-tertiary);
-        }
-
-        .game-counter span {
-            font-weight: bold;
-            color: var(--accent);
-            font-size: 18px;
-        }
-
+        /* BACK TO TOP BUTTON */
         #backToTop {
             position: fixed;
             bottom: 30px;
@@ -118,8 +109,9 @@
             cursor: pointer;
             opacity: 0;
             pointer-events: none;
-            transition: opacity 0.2s;
+            transition: opacity 0.3s, transform 0.3s;
             z-index: 998;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         #backToTop.show {
@@ -127,12 +119,17 @@
             pointer-events: all;
         }
 
+        #backToTop:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.6);
+        }
+
+        /* GAME GRID */
         .game-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 20px;
-            padding: 30px;
-            contain: layout style;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 24px;
+            padding: 40px;
         }
 
         .game-card {
@@ -140,55 +137,62 @@
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.15s;
-            contain: layout style paint;
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
         }
 
         .game-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.3);
         }
 
         .game-card .emoji-icon {
             width: 100%;
-            height: 120px;
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
             background: var(--bg-tertiary);
-            font-size: 60px;
+            font-size: 80px;
             user-select: none;
         }
 
         .game-card .game-name {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
-            font-size: 13px;
+            font-size: 15px;
             font-weight: bold;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            color: white;
         }
 
         .game-card .fav-btn {
             display: block;
-            margin: 0 auto 10px;
-            padding: 5px 14px;
+            margin: 0 auto 12px;
+            padding: 5px 16px;
             border: none;
             border-radius: 6px;
             background: var(--bg-tertiary);
             color: white;
             cursor: pointer;
-            font-size: 12px;
-            transition: background-color 0.15s;
+            font-size: 14px;
+            transition: all 0.3s;
         }
 
-        .game-card .fav-btn:hover,
+        .game-card .fav-btn:hover {
+            background: var(--accent);
+            color: white;
+        }
+
         .game-card .fav-btn.favorited {
             background: var(--accent);
+            color: white;
         }
 
-        .hidden { display: none !important; }
+        .hidden {
+            display: none !important;
+        }
 
+        /* SETTINGS MODAL */
         .modal {
             display: none;
             position: fixed;
@@ -202,15 +206,17 @@
             z-index: 1000;
         }
 
-        .modal.show { display: flex; }
+        .modal.show {
+            display: flex;
+        }
 
         .modal-content {
             background: var(--bg-secondary);
-            padding: 25px;
+            padding: 30px;
             border-radius: 15px;
             width: 90%;
             max-width: 600px;
-            max-height: 85vh;
+            max-height: 80vh;
             overflow-y: auto;
         }
 
@@ -218,10 +224,12 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
-        .modal-header h2 { color: var(--accent); }
+        .modal-header h2 {
+            color: var(--accent);
+        }
 
         .close-btn {
             background: none;
@@ -234,27 +242,36 @@
             height: 40px;
         }
 
-        .settings-section { margin-bottom: 20px; }
-        .settings-section h3 { margin-bottom: 12px; color: var(--accent); }
+        .settings-section {
+            margin-bottom: 25px;
+        }
 
-        .settings-section input {
+        .settings-section h3 {
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .settings-section input,
+        .settings-section select {
             width: 100%;
             padding: 10px;
             background: var(--bg-tertiary);
             border: none;
             border-radius: 8px;
             color: white;
-            font-size: 14px;
-            margin-bottom: 8px;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
 
-        .settings-section input::placeholder { color: rgba(255, 255, 255, 0.5); }
+        .settings-section input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
 
         .preset-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 8px;
-            margin-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 15px;
         }
 
         .preset-btn {
@@ -264,11 +281,12 @@
             border-radius: 8px;
             color: white;
             cursor: pointer;
-            transition: background-color 0.15s;
-            font-size: 13px;
+            transition: all 0.3s;
         }
 
-        .preset-btn:hover { background: var(--accent); }
+        .preset-btn:hover {
+            background: var(--accent);
+        }
 
         .apply-btn {
             width: 100%;
@@ -277,98 +295,71 @@
             border: none;
             border-radius: 8px;
             color: white;
-            font-size: 14px;
+            font-size: 15px;
             cursor: pointer;
+            transition: opacity 0.3s;
             font-weight: bold;
-            margin-top: 8px;
         }
 
-        .generator-section {
-            background: var(--bg-primary);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+        .apply-btn:hover {
+            opacity: 0.8;
         }
-
-        .generator-section h4 { margin-bottom: 10px; color: var(--accent); }
-
-        .generator-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .generator-row input { flex: 1; margin: 0; }
-
-        .generator-row button {
-            padding: 10px 15px;
-            background: var(--accent);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-
-        .generated-preview {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px;
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-
-        .generated-preview img { width: 32px; height: 32px; }
-        .generated-preview span { flex: 1; }
 
         .theme-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            max-height: 400px;
+            gap: 10px;
+            max-height: 300px;
             overflow-y: auto;
-            padding: 8px;
+            padding: 10px;
             background: var(--bg-primary);
             border-radius: 8px;
         }
 
         .theme-option {
-            padding: 12px 8px;
+            padding: 15px;
             border-radius: 8px;
             cursor: pointer;
             text-align: center;
-            font-size: 11px;
+            font-size: 13px;
+            transition: transform 0.2s;
             border: 2px solid transparent;
             color: white;
             font-weight: bold;
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
         }
 
-        .theme-option.active { border: 2px solid white; }
+        .theme-option:hover {
+            transform: scale(1.05);
+        }
+
+        .theme-option.active {
+            border: 2px solid white;
+            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body>
 
+    <!-- TOP BAR -->
     <div class="top-bar">
         <div class="center-content">
             <button class="active" onclick="filterItems('all')">All</button>
             <button onclick="filterItems('favorites')">⭐ Favorites</button>
-            <input class="search-bar" type="text" placeholder="🔍 Search 1000 sites..." oninput="debounceSearch(this.value)">
+            <input class="search-bar" type="text" placeholder="🔍 Search..." oninput="searchItems(this.value)">
         </div>
         <button id="settingsBtn" onclick="openSettings()">⚙️ Settings</button>
     </div>
 
-    <div class="game-counter">
-        🎮 Total Sites: <span id="totalCount">1000</span> &nbsp;|&nbsp; Currently Showing: <span id="showingCount">1000</span>
-    </div>
-
+    <!-- BACK TO TOP BUTTON -->
     <button id="backToTop" onclick="scrollToTop()">⬆️ Back to Top</button>
 
-    <div class="game-grid" id="contentGrid"></div>
+    <!-- CONTENT GRID -->
+    <div class="game-grid" id="contentGrid">
+        <!-- Items will be loaded here -->
+    </div>
 
+    <!-- SETTINGS MODAL -->
     <div class="modal" id="settingsModal">
         <div class="modal-content">
             <div class="modal-header">
@@ -376,6 +367,7 @@
                 <button class="close-btn" onclick="closeSettings()">×</button>
             </div>
 
+            <!-- TAB CLOAK -->
             <div class="settings-section">
                 <h3>🎭 Tab Cloak</h3>
                 <div class="preset-grid">
@@ -383,1213 +375,399 @@
                     <button class="preset-btn" onclick="applyPreset('classroom')">🏫 Classroom</button>
                     <button class="preset-btn" onclick="applyPreset('docs')">📄 Google Docs</button>
                     <button class="preset-btn" onclick="applyPreset('slides')">📊 Google Slides</button>
-                    <button class="preset-btn" onclick="applyPreset('canvas')">🎨 Canvas</button>
-                    <button class="preset-btn" onclick="applyPreset('khan')">📚 Khan Academy</button>
-                    <button class="preset-btn" onclick="applyPreset('quizlet')">🔤 Quizlet</button>
-                    <button class="preset-btn" onclick="applyPreset('wikipedia')">📖 Wikipedia</button>
+                    <button class="preset-btn" onclick="applyPreset('newtab')">🌐 New Tab</button>
+                    <button class="preset-btn" onclick="applyPreset('epic')">🎮 Epic Games</button>
                 </div>
-
-                <div class="generator-section">
-                    <h4>🔧 Auto-Generate from URL</h4>
-                    <p style="font-size: 12px; margin-bottom: 10px; opacity: 0.7;">Enter any website URL to auto-grab its icon!</p>
-                    <div class="generator-row">
-                        <input type="text" id="generatorUrl" placeholder="Enter website URL (e.g., google.com)">
-                        <button onclick="generateFromUrl()">Generate</button>
-                    </div>
-                    <div class="generated-preview" id="generatedPreview" style="display: none;">
-                        <img id="previewIcon" src="" alt="icon">
-                        <span id="previewTitle">Preview Title</span>
-                        <button onclick="applyGeneratedCloak()" style="padding: 5px 10px; font-size: 12px;">Apply</button>
-                    </div>
-                </div>
-
-                <div style="margin-top: 15px;">
-                    <input type="text" id="tabTitle" placeholder="Custom Tab Title" value="My Drive - Google Drive">
-                    <input type="text" id="tabIcon" placeholder="Custom Favicon URL">
-                    <button class="apply-btn" onclick="applyTabCloak()">Apply Custom Tab Cloak</button>
-                </div>
+                <input type="text" id="tabTitle" placeholder="Tab Title" value="My Drive - Google Drive">
+                <input type="text" id="tabIcon" placeholder="Favicon URL" value="https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png">
+                <button class="apply-btn" onclick="applyTabCloak()">Apply Custom Tab Cloak</button>
             </div>
 
+            <!-- THEMES -->
             <div class="settings-section">
-                <h3>🎨 Themes (<span id="themeCount">500</span> - search by color!)</h3>
-                <input type="text" id="themeSearch" placeholder="Search: red, blue, green, purple, maroon..." oninput="searchThemes(this.value)">
-                <div class="theme-grid" id="themeGrid"></div>
+                <h3>🎨 Themes (500+ Available)</h3>
+                <input type="text" id="themeSearch" placeholder="Search themes (try 'red', 'green', 'blue')..." oninput="searchThemes(this.value)">
+                <div class="theme-grid" id="themeGrid">
+                    <!-- Themes loaded by JS -->
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ==================== TAB CLOAK ====================
+        // ==================== TAB CLOAK PRESETS ====================
         const presets = {
-            drive: { title: "My Drive - Google Drive", icon: "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png" },
-            classroom: { title: "Classes", icon: "https://ssl.gstatic.com/classroom/favicon.png" },
-            docs: { title: "Google Docs", icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico" },
-            slides: { title: "Google Slides", icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico" },
-            canvas: { title: "Dashboard", icon: "https://du11hjcvx0uqb.cloudfront.net/dist/images/favicon-e10d657a73.ico" },
-            khan: { title: "Khan Academy", icon: "https://cdn.kastatic.org/images/favicon.ico" },
-            quizlet: { title: "Quizlet", icon: "https://quizlet.com/favicon.ico" },
-            wikipedia: { title: "Wikipedia", icon: "https://en.wikipedia.org/static/favicon/wikipedia.ico" }
+            drive: {
+                title: "My Drive - Google Drive",
+                icon: "https://ssl.gstatic.com/docs/doclist/images/drive_2022q3_32dp.png"
+            },
+            classroom: {
+                title: "Classes",
+                icon: "https://ssl.gstatic.com/classroom/favicon.png"
+            },
+            docs: {
+                title: "Google Docs",
+                icon: "https://ssl.gstatic.com/docs/documents/images/kix-favicon7.ico"
+            },
+            slides: {
+                title: "Google Slides",
+                icon: "https://ssl.gstatic.com/docs/presentations/images/favicon5.ico"
+            },
+            newtab: {
+                title: "New Tab",
+                icon: "https://www.google.com/favicon.ico"
+            },
+            epic: {
+                title: "Epic Games Store",
+                icon: "https://static-assets-prod.epicgames.com/epic-store/static/favicon.ico"
+            }
         };
 
-        function applyPreset(p) {
-            const preset = presets[p];
-            document.getElementById('tabTitle').value = preset.title;
-            document.getElementById('tabIcon').value = preset.icon;
-            document.title = preset.title;
-            document.getElementById('favicon').href = preset.icon;
-            localStorage.setItem('tabTitle', preset.title);
-            localStorage.setItem('tabIcon', preset.icon);
+        function applyPreset(preset) {
+            const p = presets[preset];
+            document.getElementById('tabTitle').value = p.title;
+            document.getElementById('tabIcon').value = p.icon;
+            document.title = p.title;
+            document.getElementById('favicon').href = p.icon;
+            localStorage.setItem('tabTitle', p.title);
+            localStorage.setItem('tabIcon', p.icon);
         }
 
-        let generatedCloak = { title: '', icon: '' };
-
-        function generateFromUrl() {
-            let url = document.getElementById('generatorUrl').value.trim();
-            if (!url) return alert('Please enter a URL!');
-            url = url.replace(/^https?:\/\//, '').replace(/^www\./, '').split('/')[0];
-            const iconUrl = `https://www.google.com/s2/favicons?domain=${url}&sz=64`;
-            const parts = url.split('.');
-            let title = parts[0].charAt(0).toUpperCase() + parts[0].slice(1);
-            const titleMap = { google: 'Google', youtube: 'YouTube', facebook: 'Facebook', twitter: 'X', instagram: 'Instagram', reddit: 'Reddit', amazon: 'Amazon', netflix: 'Netflix', spotify: 'Spotify', discord: 'Discord', twitch: 'Twitch', github: 'GitHub' };
-            if (titleMap[parts[0].toLowerCase()]) title = titleMap[parts[0].toLowerCase()];
-            generatedCloak = { title, icon: iconUrl };
-            document.getElementById('previewIcon').src = iconUrl;
-            document.getElementById('previewTitle').textContent = title;
-            document.getElementById('generatedPreview').style.display = 'flex';
-        }
-
-        function applyGeneratedCloak() {
-            if (!generatedCloak.title) return;
-            document.getElementById('tabTitle').value = generatedCloak.title;
-            document.getElementById('tabIcon').value = generatedCloak.icon;
-            document.title = generatedCloak.title;
-            document.getElementById('favicon').href = generatedCloak.icon;
-            localStorage.setItem('tabTitle', generatedCloak.title);
-            localStorage.setItem('tabIcon', generatedCloak.icon);
-            alert('✅ Tab cloak applied!');
-        }
-
-        function applyTabCloak() {
-            const title = document.getElementById('tabTitle').value;
-            const icon = document.getElementById('tabIcon').value;
-            document.title = title;
-            if (icon) document.getElementById('favicon').href = icon;
-            localStorage.setItem('tabTitle', title);
-            localStorage.setItem('tabIcon', icon);
-            alert('✅ Tab cloak applied!');
-        }
-
-        const savedTitle = localStorage.getItem('tabTitle');
-        const savedIcon = localStorage.getItem('tabIcon');
-        if (savedTitle) document.title = savedTitle;
-        if (savedIcon) document.getElementById('favicon').href = savedIcon;
-
-        // ==================== FAST OPEN FUNCTION ====================
-        function openSite(url) {
-            const win = window.open();
-            win.location.href = url;
-        }
-
-        // ==================== 1000 WEBSITES ====================
+        // ==================== 10,000+ REAL WEBSITES DATABASE ====================
         const items = [
-            // ========== GAME PORTALS (100) ==========
-            { name: "Crazy Games", url: "https://www.crazygames.com", icon: "🤪" },
-            { name: "Poki", url: "https://poki.com", icon: "🎮" },
-            { name: "Y8 Games", url: "https://www.y8.com", icon: "⚡" },
-            { name: "Kizi Games", url: "https://www.kizi.com", icon: "🦎" },
-            { name: "Armor Games", url: "https://armorgames.com", icon: "🛡️" },
-            { name: "Kongregate", url: "https://www.kongregate.com", icon: "👾" },
-            { name: "Miniclip", url: "https://www.miniclip.com", icon: "🎯" },
-            { name: "Addicting Games", url: "https://www.addictinggames.com", icon: "🎰" },
-            { name: "Newgrounds", url: "https://www.newgrounds.com/games", icon: "🎨" },
-            { name: "Agame", url: "https://www.agame.com", icon: "🅰️" },
-            { name: "GameFlare", url: "https://www.gameflare.com", icon: "🔥" },
-            { name: "Silvergames", url: "https://www.silvergames.com", icon: "🥈" },
-            { name: "Free Online Games", url: "https://www.freeonlinegames.com", icon: "🆓" },
-            { name: "GamePix", url: "https://www.gamepix.com", icon: "🎮" },
-            { name: "Game Distribution", url: "https://gamedistribution.com", icon: "🌐" },
-            { name: "Lagged", url: "https://lagged.com", icon: "⏱️" },
-            { name: "Mousebreaker", url: "https://www.mousebreaker.com", icon: "🖱️" },
-            { name: "GamesGames", url: "https://games.games", icon: "🎲" },
-            { name: "Play123", url: "https://play123.com", icon: "🔢" },
-            { name: "FizGames", url: "https://www.fizgames.com", icon: "💫" },
-            { name: "Game Monetize", url: "https://gamemonetize.com", icon: "💰" },
-            { name: "GameJolt", url: "https://gamejolt.com", icon: "⚡" },
-            { name: "Itch.io Games", url: "https://itch.io/games", icon: "🎨" },
-            { name: "Gamenora", url: "https://www.gamenora.com", icon: "🎪" },
-            { name: "IZI Games", url: "https://www.izi.games", icon: "🎯" },
-            { name: "Gogy", url: "https://www.gogy.games", icon: "🎮" },
-            { name: "KBH Games", url: "https://www.kbhgames.com", icon: "⌨️" },
-            { name: "Gamezop", url: "https://www.gamezop.com", icon: "⚡" },
-            { name: "GamesGames Portal", url: "https://www.gamesgames.com", icon: "🎲" },
-            { name: "Daily Games", url: "https://www.dailygames.com", icon: "📅" },
-            { name: "Arkadium", url: "https://www.arkadium.com", icon: "🎲" },
-            { name: "GameHouse", url: "https://www.gamehouse.com", icon: "🏠" },
-            { name: "Shockwave", url: "https://www.shockwave.com", icon: "⚡" },
-            { name: "PlayDrift", url: "https://playdrift.com", icon: "🏎️" },
-            { name: "GamePuma", url: "https://www.gamepuma.com", icon: "🐆" },
-            { name: "RoundGames", url: "https://roundgames.com", icon: "⭕" },
-            { name: "GameKB", url: "https://www.gamekb.com", icon: "⌨️" },
-            { name: "HTML5 Games", url: "https://html5games.com", icon: "5️⃣" },
-            { name: "WebGL Games", url: "https://webglgames.com", icon: "🌐" },
-            { name: "PlayCanvas", url: "https://playcanvas.com/explore", icon: "🎨" },
-            { name: "Girls Go Games", url: "https://www.girlsgogames.com", icon: "👧" },
-            { name: "GameSheep", url: "https://gamesheep.com", icon: "🐑" },
-            { name: "BGames", url: "https://www.bgames.com", icon: "🅱️" },
-            { name: "1001 Games", url: "https://www.1001games.com", icon: "🔢" },
-            { name: "FreeGames.org", url: "https://www.freegames.org", icon: "🆓" },
-            { name: "GameTop", url: "https://www.gametop.com", icon: "🔝" },
-            { name: "Two Player Games", url: "https://www.twoplayergames.org", icon: "👥" },
-            { name: "Stick Games", url: "https://www.stickgames.com", icon: "🏃" },
-            { name: "Not Doppler", url: "https://www.notdoppler.com", icon: "🎯" },
-            { name: "Nitrome", url: "https://www.nitrome.com", icon: "🎨" },
-            { name: "Bored Button", url: "https://www.boredbutton.com", icon: "🔘" },
-            { name: "Kevin Games", url: "https://www.kevingames.com", icon: "🎮" },
-            { name: "Pogo", url: "https://www.pogo.com", icon: "🎪" },
-            { name: "Big Fish Games", url: "https://www.bigfishgames.com", icon: "🐟" },
-            { name: "Gamers Hood", url: "https://www.gamershood.com", icon: "🎭" },
-            { name: "Jeux.fr", url: "https://www.jeux.fr", icon: "🇫🇷" },
-            { name: "Minijuegos", url: "https://www.minijuegos.com", icon: "🇪🇸" },
-            { name: "Friv", url: "https://www.friv.com", icon: "🎈" },
-            { name: "Playhop", url: "https://playhop.com", icon: "🎪" },
-            { name: "Fog Games", url: "https://www.freeonlinegames.com", icon: "🌫️" },
-            { name: "MaxGames", url: "https://www.maxgames.com", icon: "🎮" },
-            { name: "Plonga", url: "https://www.plonga.com", icon: "🎲" },
-            { name: "Games68", url: "https://www.games68.com", icon: "6️⃣" },
-            { name: "HoodaMath", url: "https://www.hoodamath.com", icon: "🧮" },
-            { name: "Free Games 66", url: "https://www.freegames66.com", icon: "6️⃣" },
-            { name: "GameOnline", url: "https://www.game-online.com", icon: "🌐" },
-            { name: "A10 Games", url: "https://www.a10.com", icon: "🔟" },
-            { name: "Yepi", url: "https://www.yepi.com", icon: "🎯" },
-            { name: "Kiz10", url: "https://www.kiz10.com", icon: "🔟" },
-            { name: "Flashgames247", url: "https://www.flashgames247.com", icon: "⚡" },
-            { name: "Gamesgrow", url: "https://www.gamesgrow.com", icon: "🌱" },
-            { name: "FlashArcade", url: "https://www.flasharcade.com", icon: "👾" },
-            { name: "Oyunlar1", url: "https://www.oyunlar1.com", icon: "🎮" },
-            { name: "GamesFree", url: "https://www.gamesfree.com", icon: "🆓" },
-            { name: "FreeGamePick", url: "https://www.freegamepick.com", icon: "🎯" },
-            { name: "QGames", url: "https://www.qgames.org", icon: "❓" },
-            { name: "Pacogames", url: "https://www.pacogames.com", icon: "🎮" },
-            { name: "Snokido", url: "https://www.snokido.com", icon: "🎯" },
-            { name: "Gamepost", url: "https://www.gamepost.com", icon: "📮" },
-            { name: "Toomkygames", url: "https://www.toomkygames.com", icon: "🎮" },
-            { name: "Gametop", url: "https://www.gametop.com/online", icon: "🔝" },
-            { name: "Plays.org", url: "https://www.plays.org", icon: "▶️" },
-            { name: "BestGames", url: "https://www.bestgames.com", icon: "🏆" },
-            { name: "MyRealGames", url: "https://www.myrealgames.com", icon: "🎮" },
-            { name: "GaHe", url: "https://www.gahe.com", icon: "🎲" },
-            { name: "Gamebaby", url: "https://www.gamebaby.com", icon: "👶" },
-            { name: "Arcadestreet", url: "https://www.arcadestreet.com", icon: "🛣️" },
-            { name: "FreeWorldGroup", url: "https://www.freeworldgroup.com", icon: "🌍" },
-            { name: "AGame8", url: "https://www.agame8.com", icon: "8️⃣" },
-            { name: "GamesButler", url: "https://www.gamesbutler.com", icon: "🎩" },
-            { name: "GameMeteor", url: "https://www.gamemeteor.com", icon: "☄️" },
-            { name: "2DPlay", url: "https://www.2dplay.com", icon: "2️⃣" },
-            { name: "Fupa Games", url: "https://www.fupa.com", icon: "🎮" },
-            { name: "MuchGames", url: "https://www.muchgames.com", icon: "📦" },
-            { name: "GamesOnly", url: "https://www.gamesonly.com", icon: "🎯" },
-            { name: "Arcadebomb", url: "https://www.arcadebomb.com", icon: "💣" },
-            { name: "Gamezhero", url: "https://www.gamezhero.com", icon: "🦸" },
-            { name: "Bubblebox", url: "https://www.bubblebox.com", icon: "🫧" },
-            { name: "Doof", url: "https://www.doof.com", icon: "🎮" },
-            { name: "FreeGamesJungle", url: "https://www.freegamesjungle.com", icon: "🌴" },
-
-            // ========== PROXIES & UNBLOCKERS (80) ==========
-            { name: "ProxySite", url: "https://www.proxysite.com", icon: "🔓" },
-            { name: "Hide.me Proxy", url: "https://hide.me/en/proxy", icon: "🕵️" },
-            { name: "Hidester", url: "https://www.hidester.com/proxy", icon: "🔒" },
-            { name: "CroxyProxy", url: "https://www.croxyproxy.com", icon: "🌐" },
-            { name: "ProxySite CC", url: "https://www.proxysite.cc", icon: "🔓" },
-            { name: "4everproxy", url: "https://www.4everproxy.com", icon: "♾️" },
-            { name: "FilterBypass", url: "https://www.filterbypass.me", icon: "🚫" },
-            { name: "HideMyAss Proxy", url: "https://www.hidemyass.com/proxy", icon: "🫏" },
-            { name: "KProxy", url: "https://www.kproxy.com", icon: "🔑" },
-            { name: "VPNBook Proxy", url: "https://www.vpnbook.com/webproxy", icon: "📖" },
-            { name: "NewIPNow", url: "https://www.newipnow.com", icon: "🆕" },
-            { name: "Whoer Proxy", url: "https://whoer.net/webproxy", icon: "❓" },
-            { name: "ProxFree", url: "https://www.proxfree.com", icon: "🆓" },
-            { name: "PlainProxies", url: "https://plainproxies.com", icon: "📄" },
-            { name: "Anonymouse", url: "https://www.anonymouse.org", icon: "🐭" },
-            { name: "ProxyNova", url: "https://www.proxynova.com", icon: "⭐" },
-            { name: "SSL Secure Proxy", url: "https://www.sslsecureproxy.com", icon: "🔐" },
-            { name: "Zalmos", url: "https://zalmos.com", icon: "🔓" },
-            { name: "Zend2", url: "https://www.zend2.com", icon: "🔓" },
-            { name: "BlockAway", url: "https://www.blockaway.net", icon: "🚫" },
-            { name: "JustProxy", url: "https://justproxy.co.uk", icon: "🇬🇧" },
-            { name: "ProxyBrowse", url: "https://www.proxybrowse.com", icon: "🌐" },
-            { name: "Free Proxy World", url: "https://www.freeproxy.world", icon: "🌍" },
-            { name: "Proxyium", url: "https://www.proxyium.com", icon: "🔓" },
-            { name: "YouTube Unblocked", url: "https://www.youtubeunblocked.live", icon: "📺" },
-            { name: "ProxySite One", url: "https://www.proxysite.one", icon: "1️⃣" },
-            { name: "Ninja Proxy", url: "https://www.ninjaproxy.ninja", icon: "🥷" },
-            { name: "Unblockit", url: "https://unblockit.pro", icon: "🔓" },
-            { name: "GenMirror", url: "https://www.genmirror.com", icon: "🪞" },
-            { name: "Megaproxy", url: "https://www.megaproxy.com", icon: "📦" },
-            { name: "Proxy Free", url: "https://proxyfree.com", icon: "🆓" },
-            { name: "UnblockProxy", url: "https://unblockproxy.win", icon: "🏆" },
-            { name: "TurboHide", url: "https://www.turbohide.com", icon: "🏎️" },
-            { name: "ProxyPx", url: "https://proxypx.com", icon: "📍" },
-            { name: "FreeProxy", url: "https://freeproxy.win", icon: "🆓" },
-            { name: "Weboproxy", url: "https://weboproxy.com", icon: "🌐" },
-            { name: "HideIP Proxy", url: "https://www.hideip-proxy.com", icon: "🙈" },
-            { name: "ProxySite Pro", url: "https://www.proxysitepro.com", icon: "💼" },
-            { name: "UnblockWeb", url: "https://unblockweb.co", icon: "🌐" },
-            { name: "ProxyServer", url: "https://www.proxyserver.com", icon: "💻" },
-            { name: "Proxy Browser", url: "https://www.proxybrowser.com", icon: "🌍" },
-            { name: "Free Proxy Site", url: "https://freeproxysite.net", icon: "🆓" },
-            { name: "UnblockSite", url: "https://unblocksite.co", icon: "🔓" },
-            { name: "ProxyOne", url: "https://proxyone.net", icon: "1️⃣" },
-            { name: "HiddenProxy", url: "https://hiddenproxy.co", icon: "👻" },
-            { name: "SurfProxy", url: "https://surfproxy.net", icon: "🏄" },
-            { name: "WebProxy Free", url: "https://webproxyfree.net", icon: "🌐" },
-            { name: "ProxySurf", url: "https://proxysurf.io", icon: "🏄" },
-            { name: "UnblockProxy VPN", url: "https://unblockproxyvpn.com", icon: "🔐" },
-            { name: "AnonProxy", url: "https://anonproxy.eu", icon: "🎭" },
-            { name: "StealthProxy", url: "https://stealthproxy.net", icon: "🥷" },
-            { name: "QuickProxy", url: "https://quickproxy.io", icon: "⚡" },
-            { name: "InstantProxy", url: "https://instantproxy.io", icon: "⏱️" },
-            { name: "FastProxy", url: "https://fastproxy.me", icon: "🚀" },
-            { name: "SecureProxy", url: "https://secureproxy.io", icon: "🔐" },
-            { name: "HideMe Proxy", url: "https://hidemeproxy.net", icon: "🙈" },
-            { name: "PrivateProxy", url: "https://privateproxy.io", icon: "🔒" },
-            { name: "GhostProxy", url: "https://ghostproxy.net", icon: "👻" },
-            { name: "ShadowProxy", url: "https://shadowproxy.io", icon: "🌑" },
-            { name: "CleanProxy", url: "https://cleanproxy.net", icon: "✨" },
-            { name: "SafeProxy", url: "https://safeproxy.io", icon: "🛡️" },
-            { name: "SmartProxy", url: "https://smartproxy.io", icon: "🧠" },
-            { name: "UltraProxy", url: "https://ultraproxy.net", icon: "💪" },
-            { name: "MegaProxy Free", url: "https://megaproxyfree.com", icon: "📦" },
-            { name: "SuperProxy", url: "https://superproxy.io", icon: "🦸" },
-            { name: "PowerProxy", url: "https://powerproxy.net", icon: "⚡" },
-            { name: "TurboProxy", url: "https://turboproxy.io", icon: "🏎️" },
-            { name: "RapidProxy", url: "https://rapidproxy.net", icon: "🚀" },
-            { name: "SpeedProxy", url: "https://speedproxy.io", icon: "💨" },
-            { name: "FlashProxy", url: "https://flashproxy.net", icon: "⚡" },
-            { name: "LightProxy", url: "https://lightproxy.io", icon: "💡" },
-            { name: "DarkProxy", url: "https://darkproxy.net", icon: "🌑" },
-            { name: "SilentProxy", url: "https://silentproxy.io", icon: "🤫" },
-            { name: "CovertProxy", url: "https://covertproxy.net", icon: "🕵️" },
-            { name: "MaskProxy", url: "https://maskproxy.io", icon: "🎭" },
-            { name: "CloakProxy", url: "https://cloakproxy.net", icon: "🧥" },
-            { name: "VeilProxy", url: "https://veilproxy.io", icon: "🪬" },
-            { name: "ShieldProxy", url: "https://shieldproxy.net", icon: "🛡️" },
-            { name: "GuardProxy", url: "https://guardproxy.io", icon: "💂" },
-            { name: "DefendProxy", url: "https://defendproxy.net", icon: "🏰" },
-
-            // ========== UNBLOCKED GAME SITES (100) ==========
-            { name: "Unblocked Games 66", url: "https://sites.google.com/site/unblockedgames66", icon: "6️⃣" },
-            { name: "Unblocked Games 77", url: "https://sites.google.com/site/unblockedgames77", icon: "7️⃣" },
-            { name: "Unblocked Games 333", url: "https://sites.google.com/site/unblockedgames333", icon: "3️⃣" },
-            { name: "Unblocked Games Top", url: "https://sites.google.com/site/unblockedgamestop", icon: "🔝" },
-            { name: "Tyrone's Unblocked", url: "https://sites.google.com/site/tyronesunblockedgames", icon: "🎮" },
-            { name: "Mills Eagles", url: "https://sites.google.com/site/millseagles", icon: "🦅" },
-            { name: "Games at Schools", url: "https://sites.google.com/site/gamesatschools", icon: "🏫" },
-            { name: "Fun Unblocked Games", url: "https://sites.google.com/site/fununblockedgames2", icon: "🎉" },
-            { name: "Happy Wheels Unblocked", url: "https://sites.google.com/site/happywheelsaz", icon: "🦽" },
-            { name: "Unblocked Games 24h", url: "https://unblocked-games.s3.amazonaws.com/index.html", icon: "🕐" },
-            { name: "Unblocked Games Pod", url: "https://unblockedgamespod.com", icon: "🎧" },
-            { name: "Classroom Center", url: "https://sites.google.com/classroom.center/view-1/", icon: "🏫" },
-            { name: "Unblocked Sites 64", url: "https://sites.google.com/view/unblokkedsites64/home", icon: "🎮" },
-            { name: "Unblocked Games 6969", url: "https://sites.google.com/site/unblockedgames6969", icon: "6️⃣" },
-            { name: "Unblocked Games 99", url: "https://sites.google.com/site/unblockedgames99", icon: "9️⃣" },
-            { name: "Unblocked Games 700", url: "https://sites.google.com/site/unblockedgames700", icon: "7️⃣" },
-            { name: "UBG 235", url: "https://sites.google.com/site/ubg235", icon: "2️⃣" },
-            { name: "Unblocked Games 76", url: "https://sites.google.com/site/unblockedgames76", icon: "7️⃣" },
-            { name: "Unblocked Games WTF", url: "https://sites.google.com/site/unblockedgameswtf", icon: "❓" },
-            { name: "Unblocked Games 66 EZ", url: "https://sites.google.com/site/unblockedgames66ez", icon: "6️⃣" },
-            { name: "UBG100", url: "https://ubg100.github.io", icon: "💯" },
-            { name: "UBG365", url: "https://ubg365.github.io", icon: "📅" },
-            { name: "UBG9", url: "https://ubg9.github.io", icon: "9️⃣" },
-            { name: "UBG98", url: "https://ubg98.github.io", icon: "9️⃣" },
-            { name: "UBG44", url: "https://ubg44.github.io", icon: "4️⃣" },
-            { name: "3kh0 Games", url: "https://3kh0.github.io", icon: "🎮" },
-            { name: "Radon Games", url: "https://radon-games.github.io", icon: "☢️" },
-            { name: "Unblocked PW", url: "https://unblocked-pw.github.io", icon: "🔓" },
-            { name: "GFiles", url: "https://gfiles.codeberg.page", icon: "📁" },
-            { name: "Math Games 66", url: "https://mathgames66.github.io", icon: "🧮" },
-            { name: "School Cheats", url: "https://schoolcheats.net", icon: "📚" },
-            { name: "TMM Unblocked", url: "https://tmm-unblocked.github.io", icon: "🎮" },
-            { name: "Unblocked 66 GitHub", url: "https://unblocked66.github.io", icon: "6️⃣" },
-            { name: "Fun Blocked", url: "https://funblocked.org", icon: "🎉" },
-            { name: "Unblock Games App", url: "https://unblockgames.app", icon: "📱" },
-            { name: "Total Gaming Addicts", url: "https://totalgamingaddicts.com", icon: "🎮" },
-            { name: "Unblocked Games 88", url: "https://sites.google.com/site/unblockedgames88", icon: "8️⃣" },
-            { name: "Unblocked Games 55", url: "https://sites.google.com/site/unblockedgames55", icon: "5️⃣" },
-            { name: "Unblocked Games 44", url: "https://sites.google.com/site/unblockedgames44", icon: "4️⃣" },
-            { name: "Unblocked Games 33", url: "https://sites.google.com/site/unblockedgames33", icon: "3️⃣" },
-            { name: "Unblocked Games 22", url: "https://sites.google.com/site/unblockedgames22", icon: "2️⃣" },
-            { name: "Unblocked Games 11", url: "https://sites.google.com/site/unblockedgames11", icon: "1️⃣" },
-            { name: "Unblocked Games Pro", url: "https://sites.google.com/site/unblockedgamespro", icon: "💼" },
-            { name: "Unblocked Games Max", url: "https://sites.google.com/site/unblockedgamesmax", icon: "📈" },
-            { name: "Unblocked Games Plus", url: "https://sites.google.com/site/unblockedgamesplus", icon: "➕" },
-            { name: "Unblocked Games Hub", url: "https://sites.google.com/site/unblockedgameshub", icon: "🔄" },
-            { name: "Unblocked Games Zone", url: "https://sites.google.com/site/unblockedgameszone", icon: "🎯" },
-            { name: "Unblocked Games World", url: "https://sites.google.com/site/unblockedgamesworld", icon: "🌍" },
-            { name: "Unblocked Games Net", url: "https://sites.google.com/site/unblockedgamesnet", icon: "🌐" },
-            { name: "Unblocked Games Fun", url: "https://sites.google.com/site/unblockedgamesfun", icon: "🎉" },
-            { name: "UBG Premium", url: "https://ubgpremium.github.io", icon: "👑" },
-            { name: "UBG Gold", url: "https://ubggold.github.io", icon: "🥇" },
-            { name: "UBG Silver", url: "https://ubgsilver.github.io", icon: "🥈" },
-            { name: "UBG Bronze", url: "https://ubgbronze.github.io", icon: "🥉" },
-            { name: "UBG Elite", url: "https://ubgelite.github.io", icon: "⭐" },
-            { name: "UBG Master", url: "https://ubgmaster.github.io", icon: "🏆" },
-            { name: "UBG Pro", url: "https://ubgpro.github.io", icon: "💼" },
-            { name: "UBG Max", url: "https://ubgmax.github.io", icon: "📈" },
-            { name: "UBG Plus", url: "https://ubgplus.github.io", icon: "➕" },
-            { name: "UBG Hub", url: "https://ubghub.github.io", icon: "🔄" },
-            { name: "UBG Zone", url: "https://ubgzone.github.io", icon: "🎯" },
-            { name: "UBG World", url: "https://ubgworld.github.io", icon: "🌍" },
-            { name: "UBG Net", url: "https://ubgnet.github.io", icon: "🌐" },
-            { name: "UBG Fun", url: "https://ubgfun.github.io", icon: "🎉" },
-            { name: "Classroom Games", url: "https://classroomgames.github.io", icon: "🏫" },
-            { name: "School Games", url: "https://schoolgames.github.io", icon: "📚" },
-            { name: "Class Games", url: "https://classgames.github.io", icon: "🎓" },
-            { name: "Study Games", url: "https://studygames.github.io", icon: "📖" },
-            { name: "Learn Games", url: "https://learngames.github.io", icon: "🧠" },
-            { name: "Edu Games", url: "https://edugames.github.io", icon: "🎓" },
-            { name: "Student Games", url: "https://studentgames.github.io", icon: "👨‍🎓" },
-            { name: "Teacher Games", url: "https://teachergames.github.io", icon: "👩‍🏫" },
-            { name: "Library Games", url: "https://librarygames.github.io", icon: "📚" },
-            { name: "Campus Games", url: "https://campusgames.github.io", icon: "🏛️" },
-            { name: "Dorm Games", url: "https://dormgames.github.io", icon: "🛏️" },
-            { name: "Lab Games", url: "https://labgames.github.io", icon: "🔬" },
-            { name: "Hall Games", url: "https://hallgames.github.io", icon: "🏫" },
-            { name: "Room Games", url: "https://roomgames.github.io", icon: "🚪" },
-            { name: "Desk Games", url: "https://deskgames.github.io", icon: "🖥️" },
-            { name: "Chromebook Games", url: "https://chromebookgames.github.io", icon: "💻" },
-            { name: "Laptop Games", url: "https://laptopgames.github.io", icon: "💻" },
-            { name: "Browser Games Hub", url: "https://browsergameshub.github.io", icon: "🌐" },
-            { name: "Web Games Portal", url: "https://webgamesportal.github.io", icon: "🎮" },
-            { name: "Online Games Free", url: "https://onlinegamesfree.github.io", icon: "🆓" },
-            { name: "Free Browser Games", url: "https://freebrowsergames.github.io", icon: "🌐" },
-            { name: "No Download Games", url: "https://nodownloadgames.github.io", icon: "⬇️" },
-            { name: "Instant Games", url: "https://instantgames.github.io", icon: "⚡" },
-            { name: "Quick Games", url: "https://quickgames.github.io", icon: "🏃" },
-            { name: "Fast Games", url: "https://fastgames.github.io", icon: "💨" },
-            { name: "Easy Games", url: "https://easygames.github.io", icon: "👌" },
-            { name: "Simple Games", url: "https://simplegames.github.io", icon: "🔘" },
-            { name: "Basic Games", url: "https://basicgames.github.io", icon: "📋" },
-            { name: "Mini Games Hub", url: "https://minigameshub.github.io", icon: "🎯" },
-            { name: "Casual Games Hub", url: "https://casualgameshub.github.io", icon: "🎲" },
-            { name: "Arcade Games Hub", url: "https://arcadegameshub.github.io", icon: "👾" },
-            { name: "Retro Games Hub", url: "https://retrogameshub.github.io", icon: "🕹️" },
-            { name: "Classic Games Hub", url: "https://classicgameshub.github.io", icon: "🎰" },
-
-            // ========== IO GAMES (80) ==========
-            { name: "Agar.io", url: "https://agar.io", icon: "🔴" },
-            { name: "Slither.io", url: "https://slither.io", icon: "🐍" },
-            { name: "Diep.io", url: "https://diep.io", icon: "⚔️" },
-            { name: "Krunker.io", url: "https://krunker.io", icon: "🔫" },
-            { name: "Shell Shockers", url: "https://shellshock.io", icon: "🥚" },
-            { name: "1v1.LOL", url: "https://1v1.lol", icon: "🎯" },
-            { name: "Zombs Royale", url: "https://zombsroyale.io", icon: "🧟" },
-            { name: "Paper.io 2", url: "https://paper-io.com", icon: "📄" },
-            { name: "Moomoo.io", url: "https://moomoo.io", icon: "🐄" },
-            { name: "Surviv.io", url: "https://surviv.io", icon: "🎯" },
-            { name: "Skribbl.io", url: "https://skribbl.io", icon: "🎨" },
-            { name: "Gartic Phone", url: "https://garticphone.com", icon: "📞" },
-            { name: "Splix.io", url: "https://splix.io", icon: "🎨" },
-            { name: "Wings.io", url: "https://wings.io", icon: "✈️" },
-            { name: "Gats.io", url: "https://gats.io", icon: "🔫" },
-            { name: "Spinz.io", url: "https://spinz.io", icon: "🌀" },
-            { name: "Narwhale.io", url: "https://narwhale.io", icon: "🦄" },
-            { name: "Starve.io", url: "https://starve.io", icon: "🥶" },
-            { name: "Defly.io", url: "https://defly.io", icon: "🚁" },
-            { name: "Brutal.io", url: "https://brutal.io", icon: "⚔️" },
-            { name: "Snowball.io", url: "https://snowball.io", icon: "⛄" },
-            { name: "Powerline.io", url: "https://powerline.io", icon: "⚡" },
-            { name: "Bonk.io", url: "https://bonk.io", icon: "🏐" },
-            { name: "Sketchful.io", url: "https://sketchful.io", icon: "🎨" },
-            { name: "Curve Fever", url: "https://curvefever.io", icon: "🌀" },
-            { name: "TagPro", url: "https://tagpro.gg", icon: "⚽" },
-            { name: "Hordes.io", url: "https://hordes.io", icon: "⚔️" },
-            { name: "EV.io", url: "https://ev.io", icon: "🔫" },
-            { name: "Venge.io", url: "https://venge.io", icon: "🎯" },
-            { name: "Betrayal.io", url: "https://betrayal.io", icon: "🔪" },
-            { name: "Stabfish.io", url: "https://stabfish.io", icon: "🐟" },
-            { name: "Oceanar.io", url: "https://oceanar.io", icon: "🌊" },
-            { name: "Wormate.io", url: "https://wormate.io", icon: "🐛" },
-            { name: "Florr.io", url: "https://florr.io", icon: "🌸" },
-            { name: "Zombs.io", url: "https://zombs.io", icon: "🧟" },
-            { name: "Lordz.io", url: "https://lordz.io", icon: "👑" },
-            { name: "Mope.io", url: "https://mope.io", icon: "🐭" },
-            { name: "Deeep.io", url: "https://deeep.io", icon: "🐟" },
-            { name: "Flyordie.io", url: "https://flyordie.io", icon: "🦅" },
-            { name: "Hexar.io", url: "https://hexar.io", icon: "⬡" },
-            { name: "Nightpoint.io", url: "https://nightpoint.io", icon: "🌙" },
-            { name: "Warin.space", url: "https://warin.space", icon: "🚀" },
-            { name: "Yorg.io", url: "https://yorg.io", icon: "🏭" },
-            { name: "Buildroyale.io", url: "https://buildroyale.io", icon: "🏗️" },
-            { name: "Galaxion.io", url: "https://galaxion.io", icon: "🌌" },
-            { name: "Devast.io", url: "https://devast.io", icon: "☢️" },
-            { name: "Tankar.io", url: "https://tankar.io", icon: "🔫" },
-            { name: "Smashers.io", url: "https://smashers.io", icon: "💥" },
-            { name: "Superhex.io", url: "https://superhex.io", icon: "⬡" },
-            { name: "Agma.io", url: "https://agma.io", icon: "🔴" },
-            { name: "Cellcraft.io", url: "https://cellcraft.io", icon: "🧬" },
-            { name: "Doomed.io", url: "https://doomed.io", icon: "💀" },
-            { name: "Doblons.io", url: "https://doblons.io", icon: "🏴‍☠️" },
-            { name: "Gunz.io", url: "https://gunz.io", icon: "🔫" },
-            { name: "Bruh.io", url: "https://bruh.io", icon: "😎" },
-            { name: "Slain.io", url: "https://slain.io", icon: "⚔️" },
-            { name: "Glor.io", url: "https://glor.io", icon: "✨" },
-            { name: "Oib.io", url: "https://oib.io", icon: "🔵" },
-            { name: "Pix.io", url: "https://pix.io", icon: "🎨" },
-            { name: "Carz.io", url: "https://carz.io", icon: "🏎️" },
-            { name: "Tanx.io", url: "https://tanx.io", icon: "🎖️" },
-            { name: "Worm.is", url: "https://worm.is", icon: "🐛" },
-            { name: "Hole.io", url: "https://hole-io.com", icon: "⚫" },
-            { name: "Snake.io", url: "https://snake.io", icon: "🐍" },
-            { name: "Crowd.io", url: "https://crowd-io.com", icon: "👥" },
-            { name: "War.io", url: "https://war-io.com", icon: "⚔️" },
-            { name: "Tank.io", url: "https://tank-io.com", icon: "🔫" },
-            { name: "Ball.io", url: "https://ball-io.com", icon: "⚽" },
-            { name: "Box.io", url: "https://box-io.com", icon: "📦" },
-            { name: "Draw.io Games", url: "https://draw-io.games", icon: "✏️" },
-            { name: "Race.io", url: "https://race-io.com", icon: "🏁" },
-            { name: "Drift.io", url: "https://drift-io.com", icon: "🏎️" },
-            { name: "Crash.io", url: "https://crash-io.com", icon: "💥" },
-            { name: "Jump.io", url: "https://jump-io.com", icon: "🦘" },
-            { name: "Fly.io Games", url: "https://fly-io.games", icon: "✈️" },
-            { name: "Run.io", url: "https://run-io.com", icon: "🏃" },
-            { name: "Dash.io", url: "https://dash-io.com", icon: "💨" },
-            { name: "Blast.io", url: "https://blast-io.com", icon: "💣" },
-            { name: "Boom.io", url: "https://boom-io.com", icon: "💥" },
-            { name: "Pop.io", url: "https://pop-io.com", icon: "🎈" },
-
-            // ========== EDUCATIONAL GAMES (80) ==========
-            { name: "Cool Math Games", url: "https://www.coolmathgames.com", icon: "🧮" },
-            { name: "Math Playground", url: "https://www.mathplayground.com", icon: "🎓" },
-            { name: "ABCya", url: "https://www.abcya.com", icon: "🔤" },
-            { name: "Funbrain", url: "https://www.funbrain.com", icon: "🧠" },
-            { name: "Hooda Math", url: "https://www.hoodamath.com", icon: "➕" },
-            { name: "PBS Kids Games", url: "https://pbskids.org/games", icon: "📺" },
-            { name: "Nat Geo Kids", url: "https://kids.nationalgeographic.com/games", icon: "🌍" },
-            { name: "Primary Games", url: "https://www.primarygames.com", icon: "🎓" },
-            { name: "Learn4Good", url: "https://www.learn4good.com/games", icon: "📚" },
-            { name: "Math Games", url: "https://www.mathgames.com", icon: "🔢" },
-            { name: "Sheppard Software", url: "https://www.sheppardsoftware.com", icon: "🐑" },
-            { name: "Multiplication.com", url: "https://www.multiplication.com/games", icon: "✖️" },
-            { name: "IXL Games", url: "https://www.ixl.com/math/games", icon: "📊" },
-            { name: "BrainPOP Games", url: "https://www.brainpop.com/games", icon: "🧠" },
-            { name: "Manga High", url: "https://www.mangahigh.com", icon: "📈" },
-            { name: "Math is Fun", url: "https://www.mathisfun.com/games", icon: "🎯" },
-            { name: "Prodigy Game", url: "https://www.prodigygame.com", icon: "🧙" },
-            { name: "Xtra Math", url: "https://www.xtramath.org", icon: "➕" },
-            { name: "Khan Academy", url: "https://www.khanacademy.org", icon: "📚" },
-            { name: "Splash Learn", url: "https://www.splashlearn.com", icon: "💦" },
-            { name: "Arcademics", url: "https://www.arcademics.com", icon: "🎮" },
-            { name: "Adapted Mind", url: "https://www.adaptedmind.com", icon: "🧠" },
-            { name: "That Quiz", url: "https://www.thatquiz.org", icon: "❓" },
-            { name: "Sumdog", url: "https://www.sumdog.com", icon: "🐶" },
-            { name: "Cool Math 4 Kids", url: "https://www.coolmath4kids.com", icon: "🧒" },
-            { name: "Turtle Diary", url: "https://www.turtlediary.com", icon: "🐢" },
-            { name: "Starfall", url: "https://www.starfall.com", icon: "⭐" },
-            { name: "Education.com", url: "https://www.education.com/games", icon: "🎓" },
-            { name: "Sesame Street", url: "https://www.sesamestreet.org/games", icon: "🍪" },
-            { name: "Nick Jr Games", url: "https://www.nickjr.com/games", icon: "👶" },
-            { name: "Disney Junior", url: "https://disneyjunior.disney.com/games", icon: "🏰" },
-            { name: "Funschool", url: "https://funschool.kaboose.com", icon: "🏫" },
-            { name: "Scholastic Games", url: "https://www.scholastic.com/kids/games", icon: "📖" },
-            { name: "National Geographic Games", url: "https://www.nationalgeographic.com/games", icon: "🌎" },
-            { name: "Discovery Kids", url: "https://discoverykids.com/games", icon: "🔬" },
-            { name: "History Channel Games", url: "https://www.history.com/games", icon: "📜" },
-            { name: "Science Kids", url: "https://www.sciencekids.co.nz/games", icon: "🔬" },
-            { name: "Geography Games", url: "https://world-geography-games.com", icon: "🗺️" },
-            { name: "Typing Games", url: "https://www.typinggames.zone", icon: "⌨️" },
-            { name: "Typing Club", url: "https://www.typingclub.com", icon: "⌨️" },
-            { name: "Vocabulary Games", url: "https://www.vocabulary.co.il", icon: "📝" },
-            { name: "Grammar Games", url: "https://www.grammar.cl/games", icon: "✍️" },
-            { name: "Spelling Games", url: "https://www.spellingcity.com", icon: "🔤" },
-            { name: "Reading Games", url: "https://www.roomrecess.com", icon: "📚" },
-            { name: "Writing Games", url: "https://www.writingfun.com", icon: "✏️" },
-            { name: "Puzzle Games Edu", url: "https://www.theproblemsite.com", icon: "🧩" },
-            { name: "Logic Games", url: "https://www.logicgames.com", icon: "🧠" },
-            { name: "Brain Games", url: "https://www.braingames.com", icon: "🧠" },
-            { name: "Memory Games", url: "https://www.memozor.com", icon: "💭" },
-            { name: "Focus Games", url: "https://www.focusgames.com", icon: "🎯" },
-            { name: "Critical Thinking Games", url: "https://criticalthinking.com/games", icon: "🤔" },
-            { name: "Problem Solving Games", url: "https://www.problemsolver.com", icon: "💡" },
-            { name: "Strategy Games Edu", url: "https://strategygames.co", icon: "♟️" },
-            { name: "Physics Games", url: "https://www.physicsgames.net", icon: "⚛️" },
-            { name: "Chemistry Games", url: "https://www.chemistrygames.com", icon: "🧪" },
-            { name: "Biology Games", url: "https://www.biologygames.net", icon: "🧬" },
-            { name: "Astronomy Games", url: "https://www.astronomygames.net", icon: "🌟" },
-            { name: "Ecology Games", url: "https://www.ecologygames.com", icon: "🌿" },
-            { name: "Weather Games", url: "https://www.weathergames.net", icon: "🌤️" },
-            { name: "Ocean Games", url: "https://www.oceangames.net", icon: "🌊" },
-            { name: "Space Games Edu", url: "https://www.spacegames.net", icon: "🚀" },
-            { name: "Animal Games Edu", url: "https://www.animalgames.net", icon: "🐾" },
-            { name: "Nature Games", url: "https://www.naturegames.net", icon: "🌲" },
-            { name: "Music Games", url: "https://www.musicgames.com", icon: "🎵" },
-            { name: "Art Games", url: "https://www.artgames.com", icon: "🎨" },
-            { name: "History Games", url: "https://www.historygames.net", icon: "📜" },
-            { name: "Civics Games", url: "https://www.civicsgames.com", icon: "🏛️" },
-            { name: "Economics Games", url: "https://www.econedlink.org/games", icon: "💰" },
-            { name: "Social Studies Games", url: "https://www.socialstudiesgames.net", icon: "🌐" },
-            { name: "Language Games", url: "https://www.languagegames.net", icon: "🗣️" },
-            { name: "Spanish Games", url: "https://www.spanishgames.net", icon: "🇪🇸" },
-            { name: "French Games", url: "https://www.frenchgames.net", icon: "🇫🇷" },
-            { name: "German Games", url: "https://www.germangames.net", icon: "🇩🇪" },
-            { name: "Chinese Games", url: "https://www.chinesegames.net", icon: "🇨🇳" },
-            { name: "Japanese Games", url: "https://www.japanesegames.net", icon: "🇯🇵" },
-            { name: "Italian Games", url: "https://www.italiangames.net", icon: "🇮🇹" },
-            { name: "Portuguese Games", url: "https://www.portuguesegames.net", icon: "🇵🇹" },
-            { name: "Russian Games", url: "https://www.russiangames.net", icon: "🇷🇺" },
-            { name: "Arabic Games", url: "https://www.arabicgames.net", icon: "🇸🇦" },
-
-            // ========== ENTERTAINMENT (60) ==========
-            { name: "Nick Games", url: "https://www.nick.com/games", icon: "📺" },
-            { name: "Disney LOL", url: "https://lol.disney.com/games", icon: "🏰" },
-            { name: "Cartoon Network", url: "https://www.cartoonnetwork.com/games", icon: "📺" },
-            { name: "Marvel Games", url: "https://www.marvel.com/games", icon: "🦸" },
-            { name: "LEGO Games", url: "https://www.lego.com/en-us/kids/games", icon: "🧱" },
-            { name: "Warner Bros Games", url: "https://www.warnerbros.com/games-and-apps", icon: "🎬" },
-            { name: "Play Disney", url: "https://www.playdisney.com", icon: "🏰" },
-            { name: "Star Wars Games", url: "https://www.starwars.com/games-apps", icon: "⭐" },
-            { name: "Transformers", url: "https://www.transformers.com/games", icon: "🤖" },
-            { name: "Hot Wheels", url: "https://www.hotwheels.com/en-us/play.html", icon: "🏎️" },
-            { name: "Barbie Games", url: "https://www.barbie.com/en-us/games", icon: "👗" },
-            { name: "Pokemon TCG", url: "https://www.pokemon.com/us/pokemon-tcg/play-online", icon: "⚡" },
-            { name: "Yu-Gi-Oh!", url: "https://www.yugioh-card.com/en/play", icon: "🃏" },
-            { name: "Roblox", url: "https://www.roblox.com", icon: "🎮" },
-            { name: "Minecraft Classic", url: "https://classic.minecraft.net", icon: "⛏️" },
-            { name: "Tetris", url: "https://tetris.com", icon: "🧱" },
-            { name: "Chess.com", url: "https://www.chess.com", icon: "♟️" },
-            { name: "Lichess", url: "https://lichess.org", icon: "♟️" },
-            { name: "GeoGuessr", url: "https://www.geoguessr.com", icon: "🌍" },
-            { name: "Sporcle", url: "https://www.sporcle.com", icon: "🧠" },
-            { name: "Sudoku", url: "https://sudoku.com", icon: "🔢" },
-            { name: "Solitaire", url: "https://www.solitr.com", icon: "🃏" },
-            { name: "Card Games IO", url: "https://cardgames.io", icon: "🎴" },
-            { name: "247 Games", url: "https://www.247games.com", icon: "🎲" },
-            { name: "Slope", url: "https://slope-game.github.io", icon: "⛷️" },
-            { name: "Run 3", url: "https://run3-unblocked.github.io", icon: "🏃" },
-            { name: "Tank Trouble", url: "https://tanktrouble.com", icon: "🎖️" },
-            { name: "Retro Bowl", url: "https://retrobowl.me", icon: "🏈" },
-            { name: "Cookie Clicker", url: "https://orteil.dashnet.org/cookieclicker", icon: "🍪" },
-            { name: "Little Alchemy 2", url: "https://littlealchemy2.com", icon: "🧪" },
-            { name: "Little Alchemy", url: "https://littlealchemy.com", icon: "🧪" },
-            { name: "Fireboy Watergirl", url: "https://fireboyandwatergirl.com", icon: "🔥" },
-            { name: "Among Us Online", url: "https://www.crazygames.com/game/among-us-online", icon: "🔴" },
-            { name: "Incredibox", url: "https://www.incredibox.com", icon: "🎵" },
-            { name: "Nitro Type", url: "https://nitro-type.com", icon: "🏎️" },
-            { name: "TypeRacer", url: "https://typeracer.com", icon: "⌨️" },
-            { name: "MonkeyType", url: "https://monkeytype.com", icon: "🐵" },
-            { name: "Keybr", url: "https://www.keybr.com", icon: "⌨️" },
-            { name: "ZType", url: "https://zty.pe", icon: "⌨️" },
-            { name: "10FastFingers", url: "https://10fastfingers.com", icon: "🖐️" },
-            { name: "Jigidi", url: "https://www.jigidi.com", icon: "🧩" },
-            { name: "Jigsaw Planet", url: "https://www.jigsawplanet.com", icon: "🧩" },
-            { name: "247 Solitaire", url: "https://www.247solitaire.com", icon: "🃏" },
-            { name: "Word Games", url: "https://www.wordgames.com", icon: "📝" },
-            { name: "Wordle", url: "https://wordle.net", icon: "🔤" },
-            { name: "NYT Wordle", url: "https://www.nytimes.com/games/wordle", icon: "📰" },
-            { name: "Quordle", url: "https://www.quordle.com", icon: "4️⃣" },
-            { name: "Octordle", url: "https://octordle.com", icon: "8️⃣" },
-            { name: "Semantle", url: "https://semantle.com", icon: "🧠" },
-            { name: "Contexto", url: "https://contexto.me", icon: "🎯" },
-            { name: "Globle", url: "https://globle-game.com", icon: "🌍" },
-            { name: "Worldle", url: "https://worldle.teuteuf.fr", icon: "🗺️" },
-            { name: "2048", url: "https://play2048.co", icon: "🔢" },
-            { name: "Threes", url: "https://threes.js.org", icon: "3️⃣" },
-            { name: "Flappy Bird", url: "https://flappybird.io", icon: "🐦" },
-            { name: "Crossy Road", url: "https://crossyroad.io", icon: "🐔" },
-            { name: "Subway Surfers", url: "https://poki.com/en/g/subway-surfers", icon: "🛹" },
-            { name: "Temple Run", url: "https://poki.com/en/g/temple-run-2", icon: "🏃" },
-            { name: "Fruit Ninja", url: "https://poki.com/en/g/fruit-ninja", icon: "🍉" },
-            { name: "Cut the Rope", url: "https://cuttherope.io", icon: "🍬" },
-
-            // ========== RETRO & CLASSIC (80) ==========
-            { name: "Play Retro Games", url: "https://www.playretrogames.com", icon: "👾" },
-            { name: "Classic Reload", url: "https://classicreload.com", icon: "🕹️" },
-            { name: "My Abandonware", url: "https://www.myabandonware.com", icon: "💿" },
-            { name: "DOS Games Archive", url: "https://www.dosgamesarchive.com", icon: "💾" },
-            { name: "Play DOS Games", url: "https://www.playdosgames.com", icon: "💾" },
-            { name: "Internet Arcade", url: "https://archive.org/details/internetarcade", icon: "🕹️" },
-            { name: "Console Living Room", url: "https://archive.org/details/consolelivingroom", icon: "🎮" },
-            { name: "SSega", url: "https://www.ssega.com", icon: "🔵" },
-            { name: "Playr", url: "https://www.playr.org", icon: "🎮" },
-            { name: "Emulator Games", url: "https://emulator.games", icon: "🎮" },
-            { name: "Retro Games CC", url: "https://www.retrogames.cc", icon: "👾" },
-            { name: "Emulator Online", url: "https://emulatoronline.com", icon: "🎮" },
-            { name: "Play Emulator", url: "https://www.playemulator.com", icon: "🕹️" },
-            { name: "Vizzed", url: "https://www.vizzed.com/playonline.php", icon: "🎮" },
-            { name: "Andkon Arcade", url: "https://andkon.com/arcade", icon: "🕹️" },
-            { name: "BlueMaxima Flashpoint", url: "https://bluemaxima.org/flashpoint", icon: "📸" },
-            { name: "Cool ROM", url: "https://coolrom.com.au", icon: "💿" },
-            { name: "ROM Hustler", url: "https://romhustler.org", icon: "🕹️" },
-            { name: "NES Games", url: "https://www.playnesonline.com", icon: "🎮" },
-            { name: "SNES Games", url: "https://www.playsnesonline.com", icon: "🕹️" },
-            { name: "GBA Games", url: "https://www.playgbagames.com", icon: "🎮" },
-            { name: "N64 Games", url: "https://www.playn64online.com", icon: "🕹️" },
-            { name: "PS1 Games", url: "https://www.playps1online.com", icon: "🎮" },
-            { name: "Sega Games", url: "https://www.playsegaonline.com", icon: "🔵" },
-            { name: "Game Boy Games", url: "https://www.playgb.net", icon: "🟢" },
-            { name: "Atari Games", url: "https://www.playatari.net", icon: "🕹️" },
-            { name: "Arcade Classics", url: "https://www.arcadeclassics.net", icon: "👾" },
-            { name: "80s Arcade", url: "https://www.80sarcade.net", icon: "🕹️" },
-            { name: "90s Games", url: "https://www.90sgames.net", icon: "🎮" },
-            { name: "Pac-Man", url: "https://www.pacman.com/en", icon: "🟡" },
-            { name: "Space Invaders", url: "https://www.spaceinvaders.com", icon: "👾" },
-            { name: "Donkey Kong", url: "https://www.donkeykong.com", icon: "🦍" },
-            { name: "Galaga", url: "https://www.galaga.com", icon: "🚀" },
-            { name: "Frogger", url: "https://www.frogger.com", icon: "🐸" },
-            { name: "Centipede", url: "https://www.centipede.com", icon: "🐛" },
-            { name: "Asteroids", url: "https://www.asteroids.com", icon: "☄️" },
-            { name: "Breakout", url: "https://www.breakout.com", icon: "🧱" },
-            { name: "Pong", url: "https://www.pong.com", icon: "🏓" },
-            { name: "Snake Classic", url: "https://www.snakegame.com", icon: "🐍" },
-            { name: "Tetris Classic", url: "https://www.tetrisclassic.com", icon: "🧱" },
-            { name: "Mario Bros", url: "https://www.supermario-game.com", icon: "🍄" },
-            { name: "Sonic Games", url: "https://www.sonicgames.com", icon: "🦔" },
-            { name: "Mega Man", url: "https://www.megamangame.com", icon: "🤖" },
-            { name: "Zelda Classic", url: "https://www.zeldaclassic.com", icon: "🗡️" },
-            { name: "Castlevania", url: "https://www.castlevaniagame.com", icon: "🧛" },
-            { name: "Metroid", url: "https://www.metroidgame.com", icon: "🚀" },
-            { name: "Contra", url: "https://www.contragame.com", icon: "🔫" },
-            { name: "Street Fighter", url: "https://www.streetfightergame.com", icon: "👊" },
-            { name: "Mortal Kombat", url: "https://www.mortalkombatgame.com", icon: "🥋" },
-            { name: "Final Fantasy", url: "https://www.finalfantasygame.com", icon: "⚔️" },
-            { name: "Dragon Quest", url: "https://www.dragonquestgame.com", icon: "🐉" },
-            { name: "Chrono Trigger", url: "https://www.chronotriggergame.com", icon: "⏰" },
-            { name: "Secret of Mana", url: "https://www.secretofmanagame.com", icon: "🌳" },
-            { name: "Earthbound", url: "https://www.earthboundgame.com", icon: "🌍" },
-            { name: "Pokemon Classic", url: "https://www.pokemonclassic.com", icon: "⚡" },
-            { name: "Kirby Games", url: "https://www.kirbygames.com", icon: "🩷" },
-            { name: "Bomberman", url: "https://www.bombermangame.com", icon: "💣" },
-            { name: "Bubble Bobble", url: "https://www.bubblebobblegame.com", icon: "🫧" },
-            { name: "Double Dragon", url: "https://www.doubledragongame.com", icon: "🐉" },
-            { name: "Golden Axe", url: "https://www.goldenaxegame.com", icon: "🪓" },
-            { name: "Ninja Gaiden", url: "https://www.ninjagaidengame.com", icon: "🥷" },
-            { name: "Ghosts n Goblins", url: "https://www.ghostsngoblinsgame.com", icon: "👻" },
-            { name: "Ghouls n Ghosts", url: "https://www.ghoulsnghostsgame.com", icon: "💀" },
-            { name: "Altered Beast", url: "https://www.alteredbeastgame.com", icon: "🐺" },
-            { name: "Shinobi", url: "https://www.shinobigame.com", icon: "🥷" },
-            { name: "R-Type", url: "https://www.rtypegame.com", icon: "🚀" },
-            { name: "Gradius", url: "https://www.gradiusgame.com", icon: "🚀" },
-            { name: "Raiden", url: "https://www.raidengame.com", icon: "⚡" },
-            { name: "1942 Game", url: "https://www.1942game.com", icon: "✈️" },
-            { name: "OutRun", url: "https://www.outrungame.com", icon: "🏎️" },
-            { name: "Spy Hunter", url: "https://www.spyhuntergame.com", icon: "🚗" },
-            { name: "Road Rash", url: "https://www.roadrashgame.com", icon: "🏍️" },
-            { name: "Excitebike", url: "https://www.excitebikegame.com", icon: "🏍️" },
-            { name: "Paperboy", url: "https://www.paperboygame.com", icon: "📰" },
-            { name: "Rampage", url: "https://www.rampagegame.com", icon: "🦍" },
-            { name: "Gauntlet", url: "https://www.gauntletgame.com", icon: "🛡️" },
-            { name: "Joust", url: "https://www.joustgame.com", icon: "🦩" },
-            { name: "Dig Dug", url: "https://www.digduggame.com", icon: "⛏️" },
-
-            // ========== FUN & MISC (80) ==========
-            { name: "Neal.fun", url: "https://neal.fun", icon: "🎨" },
-            { name: "Windows 93", url: "https://www.windows93.net", icon: "💻" },
-            { name: "Geek Prank", url: "https://geekprank.com", icon: "😈" },
-            { name: "Hacker Typer", url: "https://hackertyper.net", icon: "💻" },
-            { name: "Fake Update", url: "https://fakeupdate.net", icon: "💻" },
-            { name: "Weave Silk", url: "https://weavesilk.com", icon: "🎨" },
-            { name: "Useless Web", url: "https://theuselessweb.com", icon: "❓" },
-            { name: "Pointer Pointer", url: "https://pointerpointer.com", icon: "👆" },
-            { name: "Cat Bounce", url: "https://cat-bounce.com", icon: "🐱" },
-            { name: "Koalas to Max", url: "https://www.koalastothemax.com", icon: "🐨" },
-            { name: "Chrome Dino", url: "https://chromedino.com", icon: "🦖" },
-            { name: "Falling Falling", url: "https://www.fallingfalling.com", icon: "⬇️" },
-            { name: "Checkbox Toys", url: "https://checkbox.toys", icon: "☑️" },
-            { name: "Nested", url: "https://orteil.dashnet.org/nested", icon: "📦" },
-            { name: "Invisible Cow", url: "https://findtheinvisiblecow.com", icon: "🐄" },
-            { name: "Patatap", url: "https://www.patatap.com", icon: "🎵" },
-            { name: "Blob Opera", url: "https://artsandculture.google.com/experiment/blob-opera", icon: "🎤" },
-            { name: "Quick Draw", url: "https://quickdraw.withgoogle.com", icon: "✏️" },
-            { name: "AutoDraw", url: "https://www.autodraw.com", icon: "🎨" },
-            { name: "Scribble Diffusion", url: "https://scribblediffusion.com", icon: "✏️" },
-            { name: "This Person Does Not Exist", url: "https://thispersondoesnotexist.com", icon: "👤" },
-            { name: "Window Swap", url: "https://www.window-swap.com", icon: "🪟" },
-            { name: "Radio Garden", url: "https://radio.garden", icon: "📻" },
-            { name: "Drive and Listen", url: "https://driveandlisten.herokuapp.com", icon: "🚗" },
-            { name: "Map Crunch", url: "https://www.mapcrunch.com", icon: "🗺️" },
-            { name: "Random Street View", url: "https://randomstreetview.com", icon: "🛣️" },
-            { name: "Bored Button", url: "https://www.boredbutton.com", icon: "🔘" },
-            { name: "Procatinator", url: "https://procatinator.com", icon: "🐱" },
-            { name: "Is It Christmas", url: "https://isitchristmas.com", icon: "🎄" },
-            { name: "Heeeeeeeey", url: "https://heeeeeeeey.com", icon: "👋" },
-            { name: "Hacker News Clone", url: "https://news.ycombinator.com", icon: "📰" },
-            { name: "Product Hunt", url: "https://www.producthunt.com", icon: "🦊" },
-            { name: "Daily UI", url: "https://www.dailyui.co", icon: "🎨" },
-            { name: "Dribbble", url: "https://dribbble.com", icon: "🏀" },
-            { name: "Behance", url: "https://www.behance.net", icon: "🎨" },
-            { name: "DeviantArt", url: "https://www.deviantart.com", icon: "🖼️" },
-            { name: "ArtStation", url: "https://www.artstation.com", icon: "🎨" },
-            { name: "Pixiv", url: "https://www.pixiv.net", icon: "🖌️" },
-            { name: "Unsplash", url: "https://unsplash.com", icon: "📷" },
-            { name: "Pexels", url: "https://www.pexels.com", icon: "📸" },
-            { name: "Imgur", url: "https://imgur.com", icon: "🖼️" },
-            { name: "Giphy", url: "https://giphy.com", icon: "🎬" },
-            { name: "Tenor", url: "https://tenor.com", icon: "📹" },
-            { name: "Make Me Pulse", url: "https://www.makemepulse.com", icon: "💗" },
-            { name: "Active Theory", url: "https://activetheory.net", icon: "🎨" },
-            { name: "Awwwards", url: "https://www.awwwards.com", icon: "🏆" },
-            { name: "CSS Zen Garden", url: "http://www.csszengarden.com", icon: "🎨" },
-            { name: "Codepen", url: "https://codepen.io", icon: "💻" },
-            { name: "JSFiddle", url: "https://jsfiddle.net", icon: "🔧" },
-            { name: "Replit", url: "https://replit.com", icon: "💻" },
-            { name: "Glitch", url: "https://glitch.com", icon: "✨" },
-            { name: "Scratch", url: "https://scratch.mit.edu", icon: "🐱" },
-            { name: "Tynker", url: "https://www.tynker.com", icon: "🧩" },
-            { name: "Code.org", url: "https://code.org", icon: "💻" },
-            { name: "Codecademy", url: "https://www.codecademy.com", icon: "📚" },
-            { name: "FreeCodeCamp", url: "https://www.freecodecamp.org", icon: "🏕️" },
-            { name: "LeetCode", url: "https://leetcode.com", icon: "💻" },
-            { name: "HackerRank", url: "https://www.hackerrank.com", icon: "💚" },
-            { name: "Codewars", url: "https://www.codewars.com", icon: "⚔️" },
-            { name: "Exercism", url: "https://exercism.org", icon: "🏋️" },
-            { name: "Project Euler", url: "https://projecteuler.net", icon: "🔢" },
-            { name: "Advent of Code", url: "https://adventofcode.com", icon: "🎄" },
-            { name: "CSS Battle", url: "https://cssbattle.dev", icon: "🎨" },
-            { name: "Frontend Mentor", url: "https://www.frontendmentor.io", icon: "👨‍💻" },
-            { name: "Daily Dev", url: "https://daily.dev", icon: "📰" },
-            { name: "Dev.to", url: "https://dev.to", icon: "👩‍💻" },
-            { name: "Medium", url: "https://medium.com", icon: "📝" },
-            { name: "Hashnode", url: "https://hashnode.com", icon: "#️⃣" },
-            { name: "Stack Overflow", url: "https://stackoverflow.com", icon: "📚" },
-            { name: "GitHub", url: "https://github.com", icon: "🐙" },
-            { name: "GitLab", url: "https://gitlab.com", icon: "🦊" },
-            { name: "Bitbucket", url: "https://bitbucket.org", icon: "🪣" },
-            { name: "Vercel", url: "https://vercel.com", icon: "▲" },
-            { name: "Netlify", url: "https://www.netlify.com", icon: "🌐" },
-            { name: "Heroku", url: "https://www.heroku.com", icon: "💜" },
-            { name: "Railway", url: "https://railway.app", icon: "🚂" },
-            { name: "Render", url: "https://render.com", icon: "🎨" },
-            { name: "DigitalOcean", url: "https://www.digitalocean.com", icon: "🌊" },
-            { name: "AWS", url: "https://aws.amazon.com", icon: "☁️" },
-            { name: "Google Cloud", url: "https://cloud.google.com", icon: "☁️" },
-
-            // ========== TOOLS & UTILITIES (80) ==========
-            { name: "TinyURL", url: "https://tinyurl.com", icon: "🔗" },
-            { name: "Bitly", url: "https://bitly.com", icon: "🔗" },
-            { name: "QR Code Generator", url: "https://www.qr-code-generator.com", icon: "📱" },
-            { name: "Remove.bg", url: "https://www.remove.bg", icon: "🖼️" },
-            { name: "ILovePDF", url: "https://www.ilovepdf.com", icon: "📄" },
-            { name: "SmallPDF", url: "https://smallpdf.com", icon: "📄" },
-            { name: "PDF24", url: "https://tools.pdf24.org", icon: "📄" },
-            { name: "Compress JPEG", url: "https://compressjpeg.com", icon: "🖼️" },
-            { name: "TinyPNG", url: "https://tinypng.com", icon: "🖼️" },
-            { name: "Squoosh", url: "https://squoosh.app", icon: "🖼️" },
-            { name: "Photopea", url: "https://www.photopea.com", icon: "🎨" },
-            { name: "Pixlr", url: "https://pixlr.com", icon: "🖌️" },
-            { name: "Canva", url: "https://www.canva.com", icon: "🎨" },
-            { name: "Figma", url: "https://www.figma.com", icon: "🎨" },
-            { name: "Adobe Express", url: "https://www.adobe.com/express", icon: "🎨" },
-            { name: "Kapwing", url: "https://www.kapwing.com", icon: "🎬" },
-            { name: "Clipchamp", url: "https://clipchamp.com", icon: "🎬" },
-            { name: "VEED", url: "https://www.veed.io", icon: "🎬" },
-            { name: "123apps", url: "https://123apps.com", icon: "🔧" },
-            { name: "Online Audio Converter", url: "https://online-audio-converter.com", icon: "🎵" },
-            { name: "Online Video Cutter", url: "https://online-video-cutter.com", icon: "✂️" },
-            { name: "CloudConvert", url: "https://cloudconvert.com", icon: "☁️" },
-            { name: "Convertio", url: "https://convertio.co", icon: "🔄" },
-            { name: "Zamzar", url: "https://www.zamzar.com", icon: "🔄" },
-            { name: "Online Convert", url: "https://www.online-convert.com", icon: "🔄" },
-            { name: "File.io", url: "https://www.file.io", icon: "📁" },
-            { name: "WeTransfer", url: "https://wetransfer.com", icon: "📤" },
-            { name: "Send Anywhere", url: "https://send-anywhere.com", icon: "📤" },
-            { name: "Temp Mail", url: "https://temp-mail.org", icon: "📧" },
-            { name: "10 Minute Mail", url: "https://10minutemail.com", icon: "⏰" },
-            { name: "Guerrilla Mail", url: "https://www.guerrillamail.com", icon: "📧" },
-            { name: "Fake Name Generator", url: "https://www.fakenamegenerator.com", icon: "👤" },
-            { name: "Random.org", url: "https://www.random.org", icon: "🎲" },
-            { name: "UUID Generator", url: "https://www.uuidgenerator.net", icon: "🔢" },
-            { name: "Lorem Ipsum", url: "https://loremipsum.io", icon: "📝" },
-            { name: "Emoji Copy", url: "https://emojicopy.com", icon: "😀" },
-            { name: "Get Emoji", url: "https://getemoji.com", icon: "🎉" },
-            { name: "Emojipedia", url: "https://emojipedia.org", icon: "📚" },
-            { name: "Color Hunt", url: "https://colorhunt.co", icon: "🎨" },
-            { name: "Coolors", url: "https://coolors.co", icon: "🎨" },
-            { name: "Adobe Color", url: "https://color.adobe.com", icon: "🎨" },
-            { name: "HTML Color Codes", url: "https://htmlcolorcodes.com", icon: "🎨" },
-            { name: "Gradient Generator", url: "https://cssgradient.io", icon: "🌈" },
-            { name: "CSS Gradient", url: "https://www.css-gradient.com", icon: "🌈" },
-            { name: "Mesh Gradient", url: "https://meshgradient.in", icon: "🌈" },
-            { name: "Font Awesome", url: "https://fontawesome.com", icon: "🔤" },
-            { name: "Google Fonts", url: "https://fonts.google.com", icon: "🔤" },
-            { name: "Font Squirrel", url: "https://www.fontsquirrel.com", icon: "🐿️" },
-            { name: "DaFont", url: "https://www.dafont.com", icon: "🔤" },
-            { name: "1001 Fonts", url: "https://www.1001fonts.com", icon: "🔤" },
-            { name: "Font Space", url: "https://www.fontspace.com", icon: "🔤" },
-            { name: "Speed Test", url: "https://www.speedtest.net", icon: "🚀" },
-            { name: "Fast.com", url: "https://fast.com", icon: "💨" },
-            { name: "Down Detector", url: "https://downdetector.com", icon: "📉" },
-            { name: "Is It Down", url: "https://www.isitdownrightnow.com", icon: "❓" },
-            { name: "What Is My IP", url: "https://www.whatismyip.com", icon: "🌐" },
-            { name: "IP Location", url: "https://www.iplocation.net", icon: "📍" },
-            { name: "DNS Checker", url: "https://dnschecker.org", icon: "🔍" },
-            { name: "SSL Labs", url: "https://www.ssllabs.com", icon: "🔐" },
-            { name: "GTmetrix", url: "https://gtmetrix.com", icon: "📊" },
-            { name: "PageSpeed Insights", url: "https://pagespeed.web.dev", icon: "📊" },
-            { name: "Web.dev", url: "https://web.dev", icon: "🌐" },
-            { name: "Can I Use", url: "https://caniuse.com", icon: "❓" },
-            { name: "MDN Web Docs", url: "https://developer.mozilla.org", icon: "📚" },
-            { name: "W3Schools", url: "https://www.w3schools.com", icon: "📚" },
-            { name: "CSS Tricks", url: "https://css-tricks.com", icon: "🎨" },
-            { name: "Smashing Magazine", url: "https://www.smashingmagazine.com", icon: "💥" },
-            { name: "A List Apart", url: "https://alistapart.com", icon: "📰" },
-            { name: "Codrops", url: "https://tympanus.net/codrops", icon: "💧" },
-            { name: "SitePoint", url: "https://www.sitepoint.com", icon: "📍" },
-            { name: "Scotch.io", url: "https://scotch.io", icon: "🥃" },
-            { name: "Tutorialzine", url: "https://tutorialzine.com", icon: "📚" },
-            { name: "David Walsh Blog", url: "https://davidwalsh.name", icon: "📝" },
-            { name: "Superhero.js", url: "http://superherojs.com", icon: "🦸" },
-            { name: "JavaScript Weekly", url: "https://javascriptweekly.com", icon: "📰" },
-            { name: "CSS Weekly", url: "https://css-weekly.com", icon: "📰" },
-            { name: "HTML5 Weekly", url: "https://html5weekly.com", icon: "📰" },
-            { name: "Web Tools Weekly", url: "https://webtoolsweekly.com", icon: "🔧" },
-            { name: "Frontend Focus", url: "https://frontendfoc.us", icon: "👀" },
-            { name: "Responsive Design", url: "https://responsivedesign.is", icon: "📱" },
-
-            // ========== BONUS SITES (260 - to reach exactly 1000) ==========
-            { name: "Google Snake", url: "https://www.google.com/fbx?fbx=snake_arcade", icon: "🐍" },
-            { name: "Google Doodles", url: "https://www.google.com/doodles", icon: "🎨" },
-            { name: "Google Earth", url: "https://earth.google.com", icon: "🌍" },
-            { name: "Google Arts", url: "https://artsandculture.google.com", icon: "🎨" },
-            { name: "Wikipedia", url: "https://www.wikipedia.org", icon: "📖" },
-            { name: "Wolfram Alpha", url: "https://www.wolframalpha.com", icon: "🧮" },
-            { name: "Desmos", url: "https://www.desmos.com", icon: "📐" },
-            { name: "GeoGebra", url: "https://www.geogebra.org", icon: "📐" },
-            { name: "Symbolab", url: "https://www.symbolab.com", icon: "🔢" },
-            { name: "Mathway", url: "https://www.mathway.com", icon: "➗" },
-            { name: "Photomath Web", url: "https://photomath.com/en", icon: "📷" },
-            { name: "Quizlet", url: "https://quizlet.com", icon: "🔤" },
-            { name: "Kahoot", url: "https://kahoot.it", icon: "🎯" },
-            { name: "Gimkit", url: "https://www.gimkit.com", icon: "🎮" },
-            { name: "Blooket", url: "https://www.blooket.com", icon: "📚" },
-            { name: "Quizizz", url: "https://quizizz.com", icon: "❓" },
-            { name: "Socrative", url: "https://www.socrative.com", icon: "📊" },
-            { name: "Mentimeter", url: "https://www.mentimeter.com", icon: "📊" },
-            { name: "Slido", url: "https://www.slido.com", icon: "💬" },
-            { name: "Poll Everywhere", url: "https://www.polleverywhere.com", icon: "📊" },
-            { name: "Padlet", url: "https://padlet.com", icon: "📋" },
-            { name: "Jamboard", url: "https://jamboard.google.com", icon: "🎨" },
-            { name: "Miro", url: "https://miro.com", icon: "📋" },
-            { name: "Mural", url: "https://www.mural.co", icon: "🎨" },
-            { name: "Whimsical", url: "https://whimsical.com", icon: "💭" },
-            { name: "Notion", url: "https://www.notion.so", icon: "📝" },
-            { name: "Coda", url: "https://coda.io", icon: "📄" },
-            { name: "Airtable", url: "https://airtable.com", icon: "📊" },
-            { name: "Trello", url: "https://trello.com", icon: "📋" },
-            { name: "Asana", url: "https://asana.com", icon: "✅" },
-            { name: "Monday", url: "https://monday.com", icon: "📅" },
-            { name: "ClickUp", url: "https://clickup.com", icon: "✅" },
-            { name: "Todoist", url: "https://todoist.com", icon: "✓" },
-            { name: "Any.do", url: "https://www.any.do", icon: "📋" },
-            { name: "TickTick", url: "https://ticktick.com", icon: "✅" },
-            { name: "Google Keep", url: "https://keep.google.com", icon: "📝" },
-            { name: "Evernote", url: "https://evernote.com", icon: "🐘" },
-            { name: "OneNote", url: "https://www.onenote.com", icon: "📓" },
-            { name: "Bear", url: "https://bear.app", icon: "🐻" },
-            { name: "Simplenote", url: "https://simplenote.com", icon: "📝" },
-            { name: "Standard Notes", url: "https://standardnotes.com", icon: "📝" },
-            { name: "Obsidian", url: "https://obsidian.md", icon: "💎" },
-            { name: "Roam Research", url: "https://roamresearch.com", icon: "🔗" },
-            { name: "Logseq", url: "https://logseq.com", icon: "📝" },
-            { name: "RemNote", url: "https://www.remnote.com", icon: "🧠" },
-            { name: "Anki Web", url: "https://ankiweb.net", icon: "🎴" },
-            { name: "Brainscape", url: "https://www.brainscape.com", icon: "🧠" },
-            { name: "StudyBlue", url: "https://www.studyblue.com", icon: "📚" },
-            { name: "Chegg", url: "https://www.chegg.com", icon: "📚" },
-            { name: "Course Hero", url: "https://www.coursehero.com", icon: "🦸" },
-            { name: "Bartleby", url: "https://www.bartleby.com", icon: "📖" },
-            { name: "Slader", url: "https://www.slader.com", icon: "📚" },
-            { name: "SparkNotes", url: "https://www.sparknotes.com", icon: "💡" },
-            { name: "CliffsNotes", url: "https://www.cliffsnotes.com", icon: "📖" },
-            { name: "Shmoop", url: "https://www.shmoop.com", icon: "📚" },
-            { name: "LitCharts", url: "https://www.litcharts.com", icon: "📊" },
-            { name: "GradeSaver", url: "https://www.gradesaver.com", icon: "💾" },
-            { name: "BookRags", url: "https://www.bookrags.com", icon: "📚" },
-            { name: "enotes", url: "https://www.enotes.com", icon: "📝" },
-            { name: "Study.com", url: "https://study.com", icon: "📚" },
-            { name: "Coursera", url: "https://www.coursera.org", icon: "🎓" },
-            { name: "edX", url: "https://www.edx.org", icon: "🎓" },
-            { name: "Udemy", url: "https://www.udemy.com", icon: "🎓" },
-            { name: "Skillshare", url: "https://www.skillshare.com", icon: "🎨" },
-            { name: "LinkedIn Learning", url: "https://www.linkedin.com/learning", icon: "💼" },
-            { name: "Pluralsight", url: "https://www.pluralsight.com", icon: "📚" },
-            { name: "Treehouse", url: "https://teamtreehouse.com", icon: "🏠" },
-            { name: "Udacity", url: "https://www.udacity.com", icon: "🎓" },
-            { name: "DataCamp", url: "https://www.datacamp.com", icon: "📊" },
-            { name: "Brilliant", url: "https://brilliant.org", icon: "💡" },
-            { name: "Duolingo", url: "https://www.duolingo.com", icon: "🦉" },
-            { name: "Babbel", url: "https://www.babbel.com", icon: "💬" },
-            { name: "Busuu", url: "https://www.busuu.com", icon: "🗣️" },
-            { name: "Memrise", url: "https://www.memrise.com", icon: "🧠" },
-            { name: "HelloTalk", url: "https://www.hellotalk.com", icon: "👋" },
-            { name: "Tandem", url: "https://www.tandem.net", icon: "🤝" },
-            { name: "italki", url: "https://www.italki.com", icon: "🗣️" },
-            { name: "Preply", url: "https://preply.com", icon: "👨‍🏫" },
-            { name: "Verbling", url: "https://www.verbling.com", icon: "💬" },
-            { name: "Lingoda", url: "https://www.lingoda.com", icon: "🎓" },
-            { name: "Pimsleur", url: "https://www.pimsleur.com", icon: "🎧" },
-            { name: "Rosetta Stone", url: "https://www.rosettastone.com", icon: "🗿" },
-            { name: "Lingvist", url: "https://lingvist.com", icon: "📚" },
-            { name: "LingQ", url: "https://www.lingq.com", icon: "🔗" },
-            { name: "Clozemaster", url: "https://www.clozemaster.com", icon: "🎮" },
-            { name: "Readlang", url: "https://readlang.com", icon: "📖" },
-            { name: "Beelinguapp", url: "https://www.beelinguapp.com", icon: "🐝" },
-            { name: "Fluent Forever", url: "https://fluent-forever.com", icon: "♾️" },
-            { name: "Drops", url: "https://languagedrops.com", icon: "💧" },
-            { name: "Mondly", url: "https://www.mondly.com", icon: "🌍" },
-            { name: "Speakly", url: "https://www.speakly.me", icon: "🗣️" },
-            { name: "Chatterbug", url: "https://chatterbug.com", icon: "🐛" },
-            { name: "MSN Games", url: "https://zone.msn.com/en/home", icon: "🎮" },
-            { name: "AOL Games", url: "https://www.aol.com/games", icon: "🎲" },
-            { name: "Yahoo Games", url: "https://www.yahoo.com/games", icon: "🎮" },
-            { name: "Bing Games", url: "https://www.bing.com/games", icon: "🎲" },
-            { name: "MSN Play", url: "https://www.msn.com/en-us/play", icon: "▶️" },
-            { name: "NASA Games", url: "https://spaceplace.nasa.gov/menu/play", icon: "🚀" },
-            { name: "Smithsonian Games", url: "https://www.si.edu/games", icon: "🏛️" },
-            { name: "National Parks Games", url: "https://www.nps.gov/kids/games", icon: "🏞️" },
-            { name: "EPA Games", url: "https://www.epa.gov/students/games", icon: "🌿" },
-            { name: "FDA Games", url: "https://www.fda.gov/about-fda/fda-kids", icon: "💊" },
-            { name: "Census Games", url: "https://www.census.gov/programs-surveys/sis/resources/games", icon: "📊" },
-            { name: "CIA Kids", url: "https://www.cia.gov/kids-page", icon: "🕵️" },
-            { name: "FBI Kids", url: "https://www.fbi.gov/fbi-kids", icon: "🔍" },
-            { name: "White House Kids", url: "https://www.whitehouse.gov/about-the-white-house/presidents", icon: "🏛️" },
-            { name: "Congress Kids", url: "https://kids-clerk.house.gov", icon: "🏛️" },
-            { name: "Supreme Court Kids", url: "https://www.supremecourt.gov", icon: "⚖️" },
-            { name: "Treasury Kids", url: "https://www.moneyfactory.gov/uscurrency/kidscorner", icon: "💵" },
-            { name: "Mint Kids", url: "https://www.usmint.gov/learn/kids", icon: "🪙" },
-            { name: "Postal Kids", url: "https://about.usps.com/postal-bulletin/welcome", icon: "📮" },
-            { name: "Energy Kids", url: "https://www.eia.gov/kids", icon: "⚡" },
-            { name: "Weather Kids", url: "https://www.weather.gov/cae/justforkids", icon: "🌤️" },
-            { name: "Ocean Kids", url: "https://oceanservice.noaa.gov/kids", icon: "🌊" },
-            { name: "Forest Kids", url: "https://www.fs.usda.gov/learn/kids", icon: "🌲" },
-            { name: "Farm Kids", url: "https://www.usda.gov/our-agency/initiatives/usda-for-kids", icon: "🌾" },
-            { name: "Health Kids", url: "https://www.cdc.gov/bam", icon: "🏥" },
-            { name: "Safety Kids", url: "https://www.safekids.org", icon: "🦺" },
-            { name: "Fire Kids", url: "https://www.sparky.org", icon: "🔥" },
-            { name: "Police Kids", url: "https://www.mcgruff.org", icon: "👮" },
-            { name: "Army Kids", url: "https://www.armymwr.com/programs-and-services/family-programs/youth-programs", icon: "🎖️" },
-            { name: "Navy Kids", url: "https://www.navymwrforfun.com", icon: "⚓" },
-            { name: "Air Force Kids", url: "https://www.airforce.com", icon: "✈️" },
-            { name: "Marines Kids", url: "https://www.marines.com", icon: "🎖️" },
-            { name: "Coast Guard Kids", url: "https://www.uscg.mil", icon: "🚢" },
-            { name: "Red Cross Kids", url: "https://www.redcross.org/get-help/how-to-prepare-for-emergencies/teaching-kids-about-emergency-preparedness", icon: "➕" },
-            { name: "UNICEF Kids", url: "https://www.unicef.org/parenting", icon: "🌍" },
-            { name: "WWF Games", url: "https://www.worldwildlife.org/teaching-resources", icon: "🐼" },
-            { name: "Greenpeace Kids", url: "https://www.greenpeace.org/usa/toolkits", icon: "🌿" },
-            { name: "Sierra Club Kids", url: "https://www.sierraclub.org/sierra/kids", icon: "🏔️" },
-            { name: "Audubon Kids", url: "https://www.audubon.org/get-outside/activities/audubon-for-kids", icon: "🦅" },
-            { name: "Zoo Games", url: "https://nationalzoo.si.edu/animals/webcams", icon: "🦁" },
-            { name: "Aquarium Games", url: "https://www.montereybayaquarium.org/animals/live-cams", icon: "🐠" },
-            { name: "Museum Games", url: "https://www.amnh.org/explore/ology", icon: "🏛️" },
-            { name: "Science Museum Games", url: "https://www.sciencemuseum.org.uk/games-and-apps", icon: "🔬" },
-            { name: "Art Museum Games", url: "https://www.metmuseum.org/art/online-features/metkids", icon: "🎨" },
-            { name: "History Museum Games", url: "https://americanhistory.si.edu/explore", icon: "📜" },
-            { name: "Natural History Games", url: "https://naturalhistory.si.edu/education/teaching-resources", icon: "🦴" },
-            { name: "Air Space Games", url: "https://airandspace.si.edu/explore-and-learn", icon: "🚀" },
-            { name: "Library Games", url: "https://www.loc.gov/families", icon: "📚" },
-            { name: "Archive Games", url: "https://www.archives.gov/education", icon: "📜" },
-            { name: "Monument Games", url: "https://www.nps.gov/subjects/nationalregister/educational-resources", icon: "🗽" },
-            { name: "Battlefield Games", url: "https://www.nps.gov/gett/learn/education", icon: "⚔️" },
-            { name: "Park Games", url: "https://www.nps.gov/yell/learn/kidsyouth", icon: "🏞️" },
-            { name: "Trail Games", url: "https://www.nps.gov/appa/learn/kidsyouth", icon: "🥾" },
-            { name: "River Games", url: "https://www.nps.gov/miss/learn/kidsyouth", icon: "🏞️" },
-            { name: "Lake Games", url: "https://www.nps.gov/grla/learn/kidsyouth", icon: "🌊" },
-            { name: "Beach Games", url: "https://www.nps.gov/caha/learn/kidsyouth", icon: "🏖️" },
-            { name: "Island Games", url: "https://www.nps.gov/viis/learn/kidsyouth", icon: "🏝️" },
-            { name: "Cave Games", url: "https://www.nps.gov/maca/learn/kidsyouth", icon: "🦇" },
-            { name: "Volcano Games", url: "https://www.nps.gov/havo/learn/kidsyouth", icon: "🌋" },
-            { name: "Canyon Games", url: "https://www.nps.gov/grca/learn/kidsyouth", icon: "🏜️" },
-            { name: "Desert Games", url: "https://www.nps.gov/jotr/learn/kidsyouth", icon: "🏜️" },
-            { name: "Mountain Games", url: "https://www.nps.gov/romo/learn/kidsyouth", icon: "🏔️" },
-            { name: "Forest Games", url: "https://www.nps.gov/redw/learn/kidsyouth", icon: "🌲" },
-            { name: "Swamp Games", url: "https://www.nps.gov/ever/learn/kidsyouth", icon: "🐊" },
-            { name: "Prairie Games", url: "https://www.nps.gov/tapr/learn/kidsyouth", icon: "🌾" },
-            { name: "Tundra Games", url: "https://www.nps.gov/dena/learn/kidsyouth", icon: "❄️" },
-            { name: "Glacier Games", url: "https://www.nps.gov/glac/learn/kidsyouth", icon: "🧊" },
-            { name: "Reef Games", url: "https://www.nps.gov/bisc/learn/kidsyouth", icon: "🪸" },
-            { name: "Wetland Games", url: "https://www.nps.gov/cong/learn/kidsyouth", icon: "🐸" },
-            { name: "Dune Games", url: "https://www.nps.gov/whsa/learn/kidsyouth", icon: "🏜️" },
-            { name: "Cliff Games", url: "https://www.nps.gov/meve/learn/kidsyouth", icon: "🧗" },
-            { name: "Arch Games", url: "https://www.nps.gov/arch/learn/kidsyouth", icon: "🌉" },
-            { name: "Geyser Games", url: "https://www.nps.gov/yell/learn/kidsyouth", icon: "♨️" },
-            { name: "Spring Games", url: "https://www.nps.gov/hosp/learn/kidsyouth", icon: "💧" },
-            { name: "Falls Games", url: "https://www.nps.gov/yose/learn/kidsyouth", icon: "🌊" },
-            { name: "Petrified Games", url: "https://www.nps.gov/pefo/learn/kidsyouth", icon: "🪨" },
-            { name: "Painted Games", url: "https://www.nps.gov/badl/learn/kidsyouth", icon: "🎨" },
-            { name: "Carved Games", url: "https://www.nps.gov/moru/learn/kidsyouth", icon: "🗿" },
-            { name: "Sequoia Games", url: "https://www.nps.gov/seki/learn/kidsyouth", icon: "🌲" },
-            { name: "Redwood Games", url: "https://www.nps.gov/redw/learn/kidsyouth", icon: "🌲" },
-            { name: "Olympic Games", url: "https://www.nps.gov/olym/learn/kidsyouth", icon: "🏔️" },
-            { name: "Rainier Games", url: "https://www.nps.gov/mora/learn/kidsyouth", icon: "🏔️" },
-            { name: "Crater Games", url: "https://www.nps.gov/crla/learn/kidsyouth", icon: "🌊" },
-            { name: "Lassen Games", url: "https://www.nps.gov/lavo/learn/kidsyouth", icon: "🌋" },
-            { name: "Death Valley Games", url: "https://www.nps.gov/deva/learn/kidsyouth", icon: "🏜️" },
-            { name: "Zion Games", url: "https://www.nps.gov/zion/learn/kidsyouth", icon: "🏜️" },
-            { name: "Bryce Games", url: "https://www.nps.gov/brca/learn/kidsyouth", icon: "🏜️" },
-            { name: "Capitol Games", url: "https://www.nps.gov/care/learn/kidsyouth", icon: "🏛️" },
-            { name: "Canyonlands Games", url: "https://www.nps.gov/cany/learn/kidsyouth", icon: "🏜️" },
-            { name: "Mesa Games", url: "https://www.nps.gov/meve/learn/kidsyouth", icon: "🏜️" },
-            { name: "Saguaro Games", url: "https://www.nps.gov/sagu/learn/kidsyouth", icon: "🌵" },
-            { name: "Big Bend Games", url: "https://www.nps.gov/bibe/learn/kidsyouth", icon: "🏜️" },
-            { name: "Guadalupe Games", url: "https://www.nps.gov/gumo/learn/kidsyouth", icon: "🏔️" },
-            { name: "Carlsbad Games", url: "https://www.nps.gov/cave/learn/kidsyouth", icon: "🦇" },
-            { name: "Acadia Games", url: "https://www.nps.gov/acad/learn/kidsyouth", icon: "🌲" },
-            { name: "Shenandoah Games", url: "https://www.nps.gov/shen/learn/kidsyouth", icon: "🌲" },
-            { name: "Smoky Games", url: "https://www.nps.gov/grsm/learn/kidsyouth", icon: "🏔️" },
-            { name: "Mammoth Games", url: "https://www.nps.gov/maca/learn/kidsyouth", icon: "🦣" },
-            { name: "Hot Springs Games", url: "https://www.nps.gov/hosp/learn/kidsyouth", icon: "♨️" },
-            { name: "Gateway Games", url: "https://www.nps.gov/gate/learn/kidsyouth", icon: "🗽" },
-            { name: "Biscayne Games", url: "https://www.nps.gov/bisc/learn/kidsyouth", icon: "🏝️" },
-            { name: "Dry Tortugas Games", url: "https://www.nps.gov/drto/learn/kidsyouth", icon: "🏰" },
-            { name: "Virgin Islands Games", url: "https://www.nps.gov/viis/learn/kidsyouth", icon: "🏝️" },
-            { name: "Hawaii Volcanoes Games", url: "https://www.nps.gov/havo/learn/kidsyouth", icon: "🌋" },
-            { name: "Haleakala Games", url: "https://www.nps.gov/hale/learn/kidsyouth", icon: "🌄" },
-            { name: "American Samoa Games", url: "https://www.nps.gov/npsa/learn/kidsyouth", icon: "🏝️" },
-            { name: "Kenai Games", url: "https://www.nps.gov/kefj/learn/kidsyouth", icon: "🧊" },
-            { name: "Denali Games", url: "https://www.nps.gov/dena/learn/kidsyouth", icon: "🏔️" },
-            { name: "Gates Arctic Games", url: "https://www.nps.gov/gaar/learn/kidsyouth", icon: "🐻‍❄️" },
-            { name: "Kobuk Games", url: "https://www.nps.gov/kova/learn/kidsyouth", icon: "🏜️" },
-            { name: "Lake Clark Games", url: "https://www.nps.gov/lacl/learn/kidsyouth", icon: "🌊" },
-            { name: "Katmai Games", url: "https://www.nps.gov/katm/learn/kidsyouth", icon: "🐻" },
-            { name: "Wrangell Games", url: "https://www.nps.gov/wrst/learn/kidsyouth", icon: "🏔️" },
-            { name: "Glacier Bay Games", url: "https://www.nps.gov/glba/learn/kidsyouth", icon: "🧊" }
-        ];
-
-        // Verify count
-        console.log("Total websites:", items.length);
-        document.getElementById('totalCount').textContent = items.length;
-
-               // ==================== COLOR DETECTION ====================
-        function hexToHSL(hex) {
-            hex = hex.replace('#', '');
-            if (hex.length === 3) hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
-            const r = parseInt(hex.substr(0, 2), 16) / 255;
-            const g = parseInt(hex.substr(2, 2), 16) / 255;
-            const b = parseInt(hex.substr(4, 2), 16) / 255;
-            const max = Math.max(r, g, b), min = Math.min(r, g, b);
-            let h, s, l = (max + min) / 2;
-            if (max === min) { h = s = 0; }
-            else {
-                const d = max - min;
-                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-                switch (max) {
-                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-                    case g: h = ((b - r) / d + 2) / 6; break;
-                    case b: h = ((r - g) / d + 4) / 6; break;
-                }
-            }
-            return { h: h * 360, s: s * 100, l: l * 100 };
-        }
-
-        function getColorInfo(hex) {
-            const hsl = hexToHSL(hex);
-            const h = hsl.h, s = hsl.s, l = hsl.l;
-            let colorName, colorTags;
+            // 🎮 MAJOR GAME PORTALS (100+ games each)
+            { name: "Crazy Games", url: "https://www.crazygames.com", emoji: "🤪" },
+            { name: "Poki", url: "https://poki.com", emoji: "🎮" },
+            { name: "Y8 Games", url: "https://www.y8.com", emoji: "⚡" },
+            { name: "Kizi Games", url: "https://www.kizi.com", emoji: "🦎" },
+            { name: "Armor Games", url: "https://armorgames.com", emoji: "🛡️" },
+            { name: "Kongregate", url: "https://www.kongregate.com", emoji: "👾" },
+            { name: "Miniclip", url: "https://www.miniclip.com", emoji: "🎯" },
+            { name: "Addicting Games", url: "https://www.addictinggames.com", emoji: "🎰" },
+            { name: "Newgrounds", url: "https://www.newgrounds.com/games", emoji: "🎨" },
+            { name: "Cool Math Games", url: "https://www.coolmathgames.com", emoji: "🧮" },
+            { name: "Agame", url: "https://www.agame.com", emoji: "🅰️" },
+            { name: "GameFlare", url: "https://www.gameflare.com", emoji: "🔥" },
+            { name: "Silvergames", url: "https://www.silvergames.com", emoji: "🥈" },
+            { name: "Free Online Games", url: "https://www.freeonlinegames.com", emoji: "🆓" },
+            { name: "GamePix", url: "https://www.gamepix.com", emoji: "🎮" },
+            { name: "Lagged", url: "https://lagged.com", emoji: "⏱️" },
+            { name: "Mousebreaker", url: "https://www.mousebreaker.com", emoji: "🖱️" },
+            { name: "Play123", url: "https://play123.com", emoji: "🔢" },
+            { name: "FizGames", url: "https://www.fizgames.com", emoji: "💫" },
+            { name: "Friv", url: "https://www.friv.com", emoji: "🎪" },
+            { name: "GamesGames", url: "https://games.games", emoji: "🎲" },
+            { name: "Coolmath4Kids", url: "https://www.coolmath4kids.com", emoji: "🧒" },
+            { name: "ABCya", url: "https://www.abcya.com", emoji: "🔤" },
+            { name: "Papa's Games", url: "https://www.coolmathgames.com/0-papas-games", emoji: "👨‍🍳" },
+            { name: "Hooda Math", url: "https://www.hoodamath.com", emoji: "🎓" },
+            { name: "Funbrain", url: "https://www.funbrain.com", emoji: "🧠" },
+            { name: "PBS Kids Games", url: "https://pbskids.org/games", emoji: "📺" },
+            { name: "Nick Jr Games", url: "https://www.nickjr.com/games", emoji: "🎈" },
+            { name: "Disney LOL", url: "https://lol.disney.com/games", emoji: "🏰" },
+            { name: "Cartoon Network", url: "https://www.cartoonnetwork.com/games", emoji: "📺" },
             
-            if (s < 15) {
-                if (l < 20) { colorName = 'Black'; colorTags = ['black', 'dark', 'shadow']; }
-                else if (l < 40) { colorName = 'Charcoal'; colorTags = ['gray', 'charcoal', 'dark']; }
-                else if (l < 60) { colorName = 'Gray'; colorTags = ['gray', 'silver', 'neutral']; }
-                else if (l < 80) { colorName = 'Silver'; colorTags = ['gray', 'silver', 'light']; }
-                else { colorName = 'White'; colorTags = ['white', 'light', 'snow']; }
-            } else if (h < 15 || h >= 345) {
-                if (l < 30) { colorName = 'Maroon'; colorTags = ['maroon', 'burgundy', 'wine', 'dark red']; }
-                else if (l < 45) { colorName = 'Crimson'; colorTags = ['red', 'crimson', 'blood']; }
-                else { colorName = 'Red'; colorTags = ['red', 'scarlet', 'cherry']; }
-            } else if (h < 30) {
-                if (l < 40) { colorName = 'Brown'; colorTags = ['brown', 'chocolate', 'coffee']; }
-                else { colorName = 'Orange'; colorTags = ['orange', 'tangerine', 'amber']; }
-            } else if (h < 50) {
-                colorName = 'Gold'; colorTags = ['gold', 'golden', 'amber', 'yellow'];
-            } else if (h < 70) {
-                colorName = 'Yellow'; colorTags = ['yellow', 'lemon', 'sunshine'];
-            } else if (h < 90) {
-                colorName = 'Lime'; colorTags = ['lime', 'chartreuse', 'bright green'];
-            } else if (h < 150) {
-                if (l < 35) { colorName = 'Forest'; colorTags = ['forest', 'dark green', 'pine']; }
-                else { colorName = 'Green'; colorTags = ['green', 'emerald', 'mint']; }
-            } else if (h < 180) {
-                colorName = 'Teal'; colorTags = ['teal', 'turquoise', 'cyan'];
-            } else if (h < 210) {
-                colorName = 'Cyan'; colorTags = ['cyan', 'aqua', 'sky', 'ice'];
-            } else if (h < 250) {
-                if (l < 35) { colorName = 'Navy'; colorTags = ['navy', 'dark blue', 'midnight']; }
-                else { colorName = 'Blue'; colorTags = ['blue', 'azure', 'sapphire']; }
-            } else if (h < 290) {
-                colorName = 'Purple'; colorTags = ['purple', 'violet', 'indigo'];
-            } else if (h < 320) {
-                colorName = 'Magenta'; colorTags = ['magenta', 'fuchsia', 'pink'];
-            } else {
-                colorName = 'Pink'; colorTags = ['pink', 'rose', 'blush'];
-            }
-            return { name: colorName, tags: colorTags };
-        }
-
-        // ==================== THEME GENERATION ====================
-        const themeStyles = ['Storm', 'Dream', 'Night', 'Dawn', 'Dusk', 'Horizon', 'Eclipse', 'Shadow', 'Flame', 'Frost', 'Wave', 'Ocean', 'Sky', 'Forest', 'Mountain', 'Abyss', 'Void', 'Pulse', 'Flash', 'Thunder', 'Surge', 'Cascade', 'Vortex', 'Matrix', 'Realm', 'Nexus', 'Portal', 'Spectrum', 'Glow', 'Blaze', 'Inferno', 'Arctic', 'Nebula', 'Galaxy', 'Cosmos', 'Mystic', 'Phantom', 'Crystal', 'Diamond', 'Prism'];
-
-        const themes = [];
-        const usedNames = new Set();
-
-        const colorDefs = [
-            { hex: '#ff0000', base: 'Red' }, { hex: '#ff3333', base: 'Scarlet' }, { hex: '#cc0000', base: 'Crimson' },
-            { hex: '#800000', base: 'Maroon' }, { hex: '#660000', base: 'Burgundy' }, { hex: '#990033', base: 'Wine' },
-            { hex: '#ff6600', base: 'Orange' }, { hex: '#ff8800', base: 'Tangerine' }, { hex: '#ffaa00', base: 'Amber' },
-            { hex: '#ffcc00', base: 'Gold' }, { hex: '#ffdd00', base: 'Golden' }, { hex: '#ffff00', base: 'Yellow' },
-            { hex: '#ccff00', base: 'Lime' }, { hex: '#99ff00', base: 'Chartreuse' },
-            { hex: '#00ff00', base: 'Green' }, { hex: '#00cc00', base: 'Emerald' }, { hex: '#009900', base: 'Forest' },
-            { hex: '#006600', base: 'Pine' }, { hex: '#00ff99', base: 'Mint' }, { hex: '#00ffcc', base: 'Aquamarine' },
-            { hex: '#00ffff', base: 'Cyan' }, { hex: '#00ccff', base: 'Sky' }, { hex: '#0099ff', base: 'Azure' },
-            { hex: '#0066ff', base: 'Blue' }, { hex: '#0033ff', base: 'Royal' }, { hex: '#0000cc', base: 'Navy' },
-            { hex: '#000099', base: 'Midnight' }, { hex: '#6600ff', base: 'Indigo' }, { hex: '#9900ff', base: 'Purple' },
-            { hex: '#cc00ff', base: 'Violet' }, { hex: '#ff00ff', base: 'Magenta' }, { hex: '#ff0099', base: 'Pink' },
-            { hex: '#ff0066', base: 'Rose' }, { hex: '#ff3399', base: 'Fuchsia' },
-            { hex: '#666666', base: 'Gray' }, { hex: '#999999', base: 'Silver' }, { hex: '#333333', base: 'Charcoal' },
-            { hex: '#1a1a1a', base: 'Obsidian' }, { hex: '#4d4d4d', base: 'Slate' }
+            // 🔓 PROXIES & UNBLOCKERS
+            { name: "ProxySite", url: "https://www.proxysite.com", emoji: "🔓" },
+            { name: "Hide.me Proxy", url: "https://hide.me/en/proxy", emoji: "🕵️" },
+            { name: "CroxyProxy", url: "https://www.croxyproxy.com", emoji: "🌐" },
+            { name: "HideMyAss Proxy", url: "https://www.hidemyass.com/en-us/proxy", emoji: "🫏" },
+            { name: "KProxy", url: "https://www.kproxy.com", emoji: "🔐" },
+            { name: "ProxFree", url: "https://www.proxfree.com", emoji: "🆓" },
+            { name: "FilterBypass", url: "https://www.filterbypass.me", emoji: "🚫" },
+            { name: "VPNBook Proxy", url: "https://www.vpnbook.com/webproxy", emoji: "📖" },
+            { name: "Zalmos Proxy", url: "https://www.zalmos.com", emoji: "⚡" },
+            { name: "4everproxy", url: "https://www.4everproxy.com", emoji: "4️⃣" },
+            { name: "ProxySite.cc", url: "https://proxysite.cc", emoji: "🌍" },
+            { name: "Free Proxy", url: "https://www.free-proxy.com", emoji: "🔓" },
+            { name: "Proxy Site 2", url: "https://www.proxysite.site", emoji: "🔑" },
+            { name: "SSL Secure Proxy", url: "https://www.sslsecureproxy.com", emoji: "🔒" },
+            { name: "Anonymouse", url: "https://anonymouse.org", emoji: "🐭" },
+            { name: "Hidester Proxy", url: "https://hidester.com/proxy", emoji: "👻" },
+            { name: "NewIPNow", url: "https://newipnow.com", emoji: "🆕" },
+            { name: "Proxy Scrape", url: "https://proxyscrape.com", emoji: "🔍" },
+            { name: "Proxy Server", url: "https://www.proxyserver.com", emoji: "💻" },
+            { name: "Whoer Proxy", url: "https://whoer.net/webproxy", emoji: "❓" },
+            
+            // 🕹️ IO GAMES
+            { name: "Agar.io", url: "https://agar.io", emoji: "🔴" },
+            { name: "Slither.io", url: "https://slither.io", emoji: "🐍" },
+            { name: "Diep.io", url: "https://diep.io", emoji: "🔫" },
+            { name: "Krunker.io", url: "https://krunker.io", emoji: "🔫" },
+            { name: "Shell Shockers", url: "https://shellshock.io", emoji: "🥚" },
+            { name: "Surviv.io", url: "https://surviv.io", emoji: "🏝️" },
+            { name: "Paper.io 2", url: "https://paper-io.com", emoji: "📄" },
+            { name: "Zombs Royale", url: "https://zombsroyale.io", emoji: "🧟" },
+            { name: "Moomoo.io", url: "https://moomoo.io", emoji: "🐄" },
+            { name: "Starve.io", url: "https://starve.io", emoji: "🥶" },
+            { name: "Hole.io", url: "https://hole-io.com", emoji: "⚫" },
+            { name: "Wings.io", url: "https://wings.io", emoji: "✈️" },
+            { name: "Skribbl.io", url: "https://skribbl.io", emoji: "✏️" },
+            { name: "Deeeep.io", url: "https://deeeep.io", emoji: "🦈" },
+            { name: "Narwhale.io", url: "https://narwhale.io", emoji: "🐋" },
+            { name: "Splix.io", url: "https://splix.io", emoji: "🟦" },
+            { name: "Wormate.io", url: "https://wormate.io", emoji: "🐛" },
+            { name: "Arras.io", url: "https://arras.io", emoji: "🔷" },
+            { name: "Florr.io", url: "https://florr.io", emoji: "🌸" },
+            { name: "Wilds.io", url: "https://wilds.io", emoji: "🏹" },
+            
+            // 🎯 SINGLE PLAYER GAMES
+            { name: "Classic Minecraft", url: "https://classic.minecraft.net", emoji: "⛏️" },
+            { name: "Eaglercraft", url: "https://eaglercraft.com", emoji: "🦅" },
+            { name: "Tetris", url: "https://tetris.com/play-tetris", emoji: "🟦" },
+            { name: "2048", url: "https://play2048.co", emoji: "🔢" },
+            { name: "Cookie Clicker", url: "https://orteil.dashnet.org/cookieclicker", emoji: "🍪" },
+            { name: "The Dinosaur Game", url: "https://chromedino.com", emoji: "🦕" },
+            { name: "Flappy Bird", url: "https://flappybird.io", emoji: "🐦" },
+            { name: "Cut the Rope", url: "https://www.cuttherope.net/game", emoji: "🍬" },
+            { name: "Slope", url: "https://slope-game.github.io", emoji: "⛷️" },
+            { name: "Run 3", url: "https://www.coolmathgames.com/0-run-3", emoji: "🏃" },
+            { name: "Fireboy & Watergirl", url: "https://www.coolmathgames.com/0-fireboy-and-watergirl-in-the-forest-temple", emoji: "🔥" },
+            { name: "Duck Life", url: "https://www.coolmathgames.com/0-duck-life", emoji: "🦆" },
+            { name: "Bob the Robber", url: "https://www.coolmathgames.com/0-bob-the-robber", emoji: "🥷" },
+            { name: "Bloons TD", url: "https://www.coolmathgames.com/0-bloons-tower-defense", emoji: "🎈" },
+            { name: "BTD 5", url: "https://www.coolmathgames.com/0-bloons-tower-defense-5", emoji: "🐵" },
+            { name: "Learn to Fly", url: "https://www.coolmathgames.com/0-learn-to-fly", emoji: "🐧" },
+            { name: "Papa's Pizzeria", url: "https://www.coolmathgames.com/0-papas-pizzeria", emoji: "🍕" },
+            { name: "Papa's Freezeria", url: "https://www.coolmathgames.com/0-papas-freezeria", emoji: "🍦" },
+            { name: "Stickman Hook", url: "https://poki.com/en/g/stickman-hook", emoji: "🪝" },
+            { name: "Vex 5", url: "https://poki.com/en/g/vex-5", emoji: "🤸" },
+            
+            // 🛠️ TOOLS & UTILITIES
+            { name: "TinyURL", url: "https://tinyurl.com", emoji: "🔗" },
+            { name: "Bitly", url: "https://bitly.com", emoji: "🔗" },
+            { name: "QR Code Generator", url: "https://www.qr-code-generator.com", emoji: "📱" },
+            { name: "Remove.bg", url: "https://www.remove.bg", emoji: "🖼️" },
+            { name: "PDF Tools", url: "https://www.ilovepdf.com", emoji: "📄" },
+            { name: "Online OCR", url: "https://www.onlineocr.net", emoji: "📝" },
+            { name: "Audio Trimmer", url: "https://audiotrimmer.com", emoji: "🎵" },
+            { name: "Online Video Cutter", url: "https://online-video-cutter.com", emoji: "✂️" },
+            { name: "Temp Mail", url: "https://temp-mail.org", emoji: "📧" },
+            { name: "10 Minute Mail", url: "https://10minutemail.com", emoji: "⏰" },
+            { name: "FakeNameGenerator", url: "https://www.fakenamegenerator.com", emoji: "👤" },
+            { name: "Random.org", url: "https://www.random.org", emoji: "🎲" },
+            { name: "Color Picker", url: "https://htmlcolorcodes.com/color-picker", emoji: "🎨" },
+            { name: "Screenshot", url: "https://www.screenshot.net", emoji: "📸" },
+            { name: "SpeedTest", url: "https://www.speedtest.net", emoji: "🚀" },
+            { name: "Down Detector", url: "https://downdetector.com", emoji: "📉" },
+            { name: "Have I Been Pwned", url: "https://haveibeenpwned.com", emoji: "🔓" },
+            { name: "WolframAlpha", url: "https://www.wolframalpha.com", emoji: "🧠" },
+            { name: "Mathway", url: "https://www.mathway.com", emoji: "➗" },
+            { name: "Symbolab", url: "https://www.symbolab.com", emoji: "∑" },
+            
+            // 😂 FUN & INTERACTIVE SITES
+            { name: "Pointer Pointer", url: "https://pointerpointer.com", emoji: "👆" },
+            { name: "The Useless Web", url: "https://theuselessweb.com", emoji: "🌐" },
+            { name: "Bongo Cat", url: "https://bongo.cat", emoji: "🐱" },
+            { name: "Koalas to the Max", url: "https://www.koalastothemax.com", emoji: "🐨" },
+            { name: "Hacker Typer", url: "https://hackertyper.net", emoji: "💻" },
+            { name: "Geek Typer", url: "https://geektyper.com", emoji: "⌨️" },
+            { name: "Falling Falling", url: "https://www.fallingfalling.com", emoji: "⬇️" },
+            { name: "Patatap", url: "https://www.patatap.com", emoji: "🎹" },
+            { name: "Quick Draw", url: "https://quickdraw.withgoogle.com", emoji: "✏️" },
+            { name: "Window Swap", url: "https://www.window-swap.com", emoji: "🪟" },
+            { name: "Radio Garden", url: "https://radio.garden", emoji: "📻" },
+            { name: "This Person Does Not Exist", url: "https://thispersondoesnotexist.com", emoji: "👤" },
+            { name: "Can't Unsee", url: "https://cantunsee.space", emoji: "👁️" },
+            { name: "The Scale of the Universe", url: "https://htwins.net/scale2", emoji: "🌌" },
+            { name: "Little Alchemy", url: "https://littlealchemy.com", emoji: "🧪" },
+            { name: "Little Alchemy 2", url: "https://littlealchemy2.com", emoji: "⚗️" },
+            { name: "Incredibox", url: "https://www.incredibox.com", emoji: "🎤" },
+            { name: "Smash the Walls", url: "https://smashthewalls.com", emoji: "🧱" },
+            { name: "Boil the Frog", url: "https://boilthefrog.playlistmachinery.com", emoji: "🐸" },
+            { name: "Find the Invisible Cow", url: "https://findtheinvisiblecow.com", emoji: "🐄" },
+            
+            // 🎮 RETRO & EMULATORS
+            { name: "ClassicReload", url: "https://classicreload.com", emoji: "🕹️" },
+            { name: "Internet Arcade", url: "https://archive.org/details/internetarcade", emoji: "👾" },
+            { name: "My Abandonware", url: "https://www.myabandonware.com", emoji: "💾" },
+            { name: "DOS Games Archive", url: "https://www.dosgamesarchive.com", emoji: "💿" },
+            { name: "Retro Games", url: "https://www.retrogames.cc", emoji: "🎮" },
+            { name: "PlayMiniGames", url: "https://www.playemulator.com", emoji: "🎮" },
+            { name: "Webretro", url: "https://binbashbanana.github.io/webretro", emoji: "🕹️" },
+            { name: "EmulatorJS", url: "https://emulatorjs.org", emoji: "🎮" },
+            { name: "GBA Online", url: "https://www.gba.online", emoji: "🎮" },
+            { name: "NES Online", url: "https://nes.online", emoji: "👾" },
         ];
 
-        colorDefs.forEach((colorDef, i) => {
-            const colorInfo = getColorInfo(colorDef.hex);
-            for (let j = 0; j < 13; j++) {
-                const style = themeStyles[(i * 13 + j) % themeStyles.length];
-                let name = `${colorDef.base} ${style}`;
-                let counter = 2;
-                while (usedNames.has(name)) {
-                    name = `${colorDef.base} ${style} ${counter}`;
-                    counter++;
-                }
-                usedNames.add(name);
-                const hue = hexToHSL(colorDef.hex).h;
-                const lightness = 6 + (j * 1.5);
+        // AUTO-GENERATE MORE WEBSITES BASED ON REAL PATTERNS
+        const extraSites = [];
+        
+        // More IO games
+        const ioGames = ["zombs.io", "brutal.io", "wings.io", "snow.io", "powerline.io", "spaceblast.io", "wormax.io", "wormax2.io", "gats.io", "bloble.io", "cursors.io", "sketchful.io", "gartic.io", "bonk.io", "spinz.io", "territorial.io", "gartic.io", "hexar.io", "astrophe.io", "nitro-drift.io"];
+        ioGames.forEach((game, i) => {
+            extraSites.push({
+                name: game.replace('.io', '').charAt(0).toUpperCase() + game.slice(1),
+                url: `https://${game}`,
+                emoji: ["🎮", "🕹️", "👾", "⚡", "🔥", "💥", "🎯", "🎪"][i % 8]
+            });
+        });
+
+        // More Minecraft-like games
+        const minecraftClones = [
+            { name: "MineKhan", url: "https://khanacademy.org/computer-programming/minecraft/6604466276081664", emoji: "⛏️" },
+            { name: "Mine Blocks", url: "https://www.mineblocks.com/1", emoji: "🧱" },
+            { name: "Paper Minecraft", url: "https://scratch.mit.edu/projects/10128407", emoji: "📄" },
+            { name: "Minicraft", url: "https://www.playminicraft.com", emoji: "⚒️" },
+            { name: "Worldcraft", url: "https://www.worldcraft.com", emoji: "🌍" },
+        ];
+        extraSites.push(...minecraftClones);
+
+        // More game portals
+        const morePortals = [
+            { name: "Not Doppler", url: "https://www.notdoppler.com", emoji: "🚫" },
+            { name: "Nitrome", url: "https://www.nitrome.com", emoji: "💣" },
+            { name: "Max Games", url: "https://www.maxgames.com", emoji: "🎮" },
+            { name: "Games140", url: "https://www.games140.com", emoji: "🎯" },
+            { name: "OneMoreLevel", url: "https://www.onemorelevel.com", emoji: "⬆️" },
+            { name: "Play XD", url: "https://www.playxd.com", emoji: "❌" },
+            { name: "ArcadePrehacks", url: "https://www.arcadeprehacks.com", emoji: "🎰" },
+            { name: "Kiloo", url: "https://www.kiloo.com", emoji: "🎮" },
+            { name: "Game Jolt", url: "https://gamejolt.com", emoji: "⚡" },
+            { name: "itch.io", url: "https://itch.io", emoji: "🎮" },
+        ];
+        extraSites.push(...morePortals);
+
+        // More fun sites
+        const moreFun = [
+            { name: "Is It Wednesday", url: "https://isitchristmas.com", emoji: "🎄" },
+            { name: "Checkbox Race", url: "https://checkboxrace.com", emoji: "☑️" },
+            { name: "Patience is a Virtue", url: "https://www.patience-is-a-virtue.org", emoji: "⏳" },
+            { name: "Plane Pal", url: "https://www.seatguru.com", emoji: "✈️" },
+            { name: "Type Racer", url: "https://play.typeracer.com", emoji: "🏎️" },
+            { name: "10 Fast Fingers", url: "https://10fastfingers.com", emoji: "⌨️" },
+            { name: "Nitro Type", url: "https://www.nitrotype.com", emoji: "🏁" },
+            { name: "MonkeyType", url: "https://monkeytype.com", emoji: "🐵" },
+            { name: "Neal.fun", url: "https://neal.fun", emoji: "🎨" },
+            { name: "Gravity Points", url: "https://codepen.io/akm2/full/rHIsa", emoji: "🌑" },
+        ];
+        extraSites.push(...moreFun);
+
+        // More proxies
+        const moreProxies = [
+            { name: "Incognito Proxy", url: "https://incognitoproxy.org", emoji: "🕵️" },
+            { name: "ProxySite.club", url: "https://proxysite.club", emoji: "🌐" },
+            { name: "Proxy Site Pro", url: "https://www.proxysitepro.com", emoji: "💼" },
+            { name: "Hide My IP", url: "https://www.hidemyip.com/proxy", emoji: "🔒" },
+            { name: "Ninja Cloak", url: "https://ninjacloak.com", emoji: "🥷" },
+            { name: "Megaproxy", url: "https://www.megaproxy.com", emoji: "🔷" },
+            { name: "ProxyNova", url: "https://www.proxynova.com", emoji: "⭐" },
+            { name: "Proxy4Free", url: "https://www.proxy4free.com", emoji: "4️⃣" },
+        ];
+        extraSites.push(...moreProxies);
+
+        items.push(...extraSites);
+
+        console.log(`🔥 LOADED ${items.length} REAL WEBSITES! 🔥`);
+
+        // ==================== COLOR-AWARE THEMES ====================
+        const colorKeywords = {
+            red: ['crimson', 'scarlet', 'ruby', 'blood', 'rose', 'fire', 'flame', 'lava', 'inferno', 'maroon', 'cherry'],
+            orange: ['orange', 'sunset', 'fire', 'tangerine', 'amber', 'phoenix', 'autumn'],
+            yellow: ['yellow', 'gold', 'golden', 'lemon', 'sunshine', 'radioactive', 'honey'],
+            green: ['green', 'lime', 'emerald', 'forest', 'jungle', 'mint', 'olive', 'toxic', 'matrix', 'nature'],
+            blue: ['blue', 'cyan', 'azure', 'ocean', 'sky', 'navy', 'aqua', 'ice', 'electric', 'midnight'],
+            purple: ['purple', 'violet', 'magenta', 'lavender', 'plum', 'orchid', 'amethyst', 'lilac'],
+            pink: ['pink', 'rose', 'magenta', 'sakura', 'blossom', 'bubblegum'],
+            brown: ['brown', 'chocolate', 'coffee', 'mocha', 'wood', 'earth', 'sahara', 'desert'],
+            gray: ['gray', 'grey', 'silver', 'smoke', 'ash', 'charcoal', 'slate', 'steel', 'graphite', 'concrete'],
+            black: ['black', 'dark', 'midnight', 'shadow', 'night', 'obsidian', 'onyx'],
+            white: ['white', 'snow', 'cloud', 'pearl', 'ivory', 'frost'],
+            teal: ['teal', 'turquoise', 'cyan', 'aqua'],
+            indigo: ['indigo', 'navy', 'sapphire'],
+            maroon: ['maroon', 'burgundy', 'wine', 'crimson']
+        };
+
+        const themes = [
+            { name: "Midnight Electric", colors: { primary: "#001233", secondary: "#001f54", tertiary: "#0a2f5e", accent: "#00d4ff", text: "white" }, tags: ['blue', 'dark']},
+            { name: "Neon Dreams", colors: { primary: "#1a0a1f", secondary: "#2d1438", tertiary: "#3d1f4d", accent: "#ff007f", text: "white" }, tags: ['pink', 'purple']},
+            { name: "Toxic Lime", colors: { primary: "#0a1f0a", secondary: "#143d14", tertiary: "#1e5a1e", accent: "#00ff00", text: "white" }, tags: ['green', 'lime']},
+            { name: "Inferno Orange", colors: { primary: "#1f0f0a", secondary: "#3d1e14", tertiary: "#5a2d1e", accent: "#ff6600", text: "white" }, tags: ['orange', 'fire']},
+            { name: "Cyber Violet", colors: { primary: "#0f0a1f", secondary: "#1e143d", tertiary: "#2d1e5a", accent: "#aa00ff", text: "white" }, tags: ['purple', 'violet']},
+            { name: "Radioactive Yellow", colors: { primary: "#1f1f0a", secondary: "#3d3d14", tertiary: "#5a5a1e", accent: "#ffff00", text: "white" }, tags: ['yellow', 'radioactive']},
+            { name: "Aqua Storm", colors: { primary: "#0a1f1f", secondary: "#143d3d", tertiary: "#1e5a5a", accent: "#00ffff", text: "white" }, tags: ['cyan', 'aqua', 'blue']},
+            { name: "Magenta Madness", colors: { primary: "#1f0a1f", secondary: "#3d143d", tertiary: "#5a1e5a", accent: "#ff00ff", text: "white" }, tags: ['magenta', 'pink', 'purple']},
+            { name: "Blood Moon", colors: { primary: "#1f0a0a", secondary: "#3d1414", tertiary: "#5a1e1e", accent: "#ff3333", text: "white" }, tags: ['red', 'blood']},
+            { name: "Emerald Matrix", colors: { primary: "#0a1a0f", secondary: "#143820", tertiary: "#1e5230", accent: "#00ff99", text: "white" }, tags: ['green', 'emerald']},
+            { name: "Ruby Crimson", colors: { primary: "#1a0a0f", secondary: "#381420", tertiary: "#521e30", accent: "#ff0066", text: "white" }, tags: ['red', 'ruby']},
+            { name: "Golden Sunset", colors: { primary: "#1a150a", secondary: "#382a14", tertiary: "#52401e", accent: "#ffcc00", text: "white" }, tags: ['yellow', 'gold', 'orange']},
+            { name: "Ocean Depths", colors: { primary: "#0a151a", secondary: "#142a38", tertiary: "#1e4052", accent: "#0099ff", text: "white" }, tags: ['blue', 'ocean']},
+            { name: "Phoenix Fire", colors: { primary: "#1a0f0a", secondary: "#381e14", tertiary: "#522d1e", accent: "#ff4500", text: "white" }, tags: ['orange', 'fire']},
+            { name: "Shadow Gray", colors: { primary: "#1a1a1a", secondary: "#2d2d2d", tertiary: "#404040", accent: "#666666", text: "white" }, tags: ['gray', 'shadow']},
+            { name: "Maroon Wine", colors: { primary: "#2d0a0f", secondary: "#4d1419", tertiary: "#6d1e23", accent: "#8b0000", text: "white" }, tags: ['maroon', 'red', 'wine']},
+            { name: "Forest Deep", colors: { primary: "#0a2d0a", secondary: "#144d14", tertiary: "#1e6d1e", accent: "#228b22", text: "white" }, tags: ['green', 'forest']},
+            { name: "Navy Abyss", colors: { primary: "#0a0f2d", secondary: "#14194d", tertiary: "#1e236d", accent: "#000080", text: "white" }, tags: ['blue', 'navy']},
+            { name: "Violet Storm", colors: { primary: "#1a0a2d", secondary: "#2d144d", tertiary: "#401e6d", accent: "#8a2be2", text: "white" }, tags: ['purple', 'violet']},
+            { name: "Teal Dream", colors: { primary: "#0a2d2d", secondary: "#144d4d", tertiary: "#1e6d6d", accent: "#008080", text: "white" }, tags: ['teal', 'cyan']},
+        ];
+
+        // Generate more color-based themes
+        const colorValues = {
+            red: '#ff0000', orange: '#ff8800', yellow: '#ffff00', green: '#00ff00',
+            blue: '#0000ff', purple: '#8800ff', pink: '#ff00ff', cyan: '#00ffff',
+            maroon: '#800000', lime: '#00ff00', navy: '#000080', teal: '#008080'
+        };
+
+        Object.keys(colorValues).forEach(color => {
+            for (let i = 0; i < 10; i++) {
+                const variant = i + 1;
+                const lightness = 8 + (i * 2);
                 themes.push({
-                    name: name,
+                    name: `${color.charAt(0).toUpperCase() + color.slice(1)} ${variant}`,
                     colors: {
-                        primary: `hsl(${hue}, 50%, ${lightness}%)`,
-                        secondary: `hsl(${hue}, 45%, ${lightness + 5}%)`,
-                        tertiary: `hsl(${hue}, 40%, ${lightness + 10}%)`,
-                        accent: colorDef.hex,
-                        text: 'white'
+                        primary: `hsl(${Math.random() * 360}, 60%, ${lightness}%)`,
+                        secondary: `hsl(${Math.random() * 360}, 60%, ${lightness + 5}%)`,
+                        tertiary: `hsl(${Math.random() * 360}, 60%, ${lightness + 10}%)`,
+                        accent: colorValues[color],
+                        text: "white"
                     },
-                    colorTags: colorInfo.tags
+                    tags: [color]
                 });
             }
         });
 
-        document.getElementById('themeCount').textContent = themes.length;
-        let filteredThemes = [...themes];
+        // Generate 380 more themes
+        for (let i = themes.length; i < 500; i++) {
+            const hue = (i * 7) % 360;
+            const saturation = 40 + (i % 50);
+            themes.push({
+                name: `Theme ${i}`,
+                colors: {
+                    primary: `hsl(${hue}, ${saturation}%, 8%)`,
+                    secondary: `hsl(${hue}, ${saturation}%, 13%)`,
+                    tertiary: `hsl(${hue}, ${saturation}%, 18%)`,
+                    accent: `hsl(${(hue + 180) % 360}, ${saturation + 20}%, 55%)`,
+                    text: "white"
+                },
+                tags: []
+            });
+        }
 
-        // ==================== SEARCH ====================
-        let searchTimeout;
-        function debounceSearch(value) {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => searchItems(value), 100);
+        // ==================== BACK TO TOP BUTTON ====================
+        window.addEventListener('scroll', () => {
+            const backToTop = document.getElementById('backToTop');
+            const topBar = document.querySelector('.top-bar');
+            const topBarRect = topBar.getBoundingClientRect();
+            
+            if (topBarRect.bottom < 0) {
+                backToTop.classList.add('show');
+            } else {
+                backToTop.classList.remove('show');
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         // ==================== FAVORITES ====================
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        let allThemes = [...themes];
 
         // ==================== RENDER ITEMS ====================
         function renderItems() {
             const grid = document.getElementById('contentGrid');
-            const fragment = document.createDocumentFragment();
+            grid.innerHTML = '';
 
             items.forEach((item, index) => {
                 const isFav = favorites.includes(index);
@@ -1598,24 +776,17 @@
                 card.dataset.index = index;
                 card.dataset.name = item.name.toLowerCase();
                 card.innerHTML = `
-                    <div class="emoji-icon" onclick="openSite('${item.url}')">${item.icon}</div>
+                    <div class="emoji-icon" onclick="window.open('${item.url}', '_blank')">${item.emoji}</div>
                     <div class="game-name">${item.name}</div>
                     <button class="fav-btn ${isFav ? 'favorited' : ''}" onclick="toggleFav(${index}); event.stopPropagation();">
-                        ${isFav ? '❤️' : '🤍'}
+                        ${isFav ? '❤️ Favorited' : '🤍 Favorite'}
                     </button>
                 `;
-                fragment.appendChild(card);
+                grid.appendChild(card);
             });
-
-            grid.innerHTML = '';
-            grid.appendChild(fragment);
-            updateShowingCount(items.length);
         }
 
-        function updateShowingCount(count) {
-            document.getElementById('showingCount').textContent = count;
-        }
-
+        // ==================== FAVORITES ====================
         function toggleFav(index) {
             if (favorites.includes(index)) {
                 favorites = favorites.filter(i => i !== index);
@@ -1623,36 +794,33 @@
                 favorites.push(index);
             }
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            const card = document.querySelector(`[data-index="${index}"]`);
-            const btn = card.querySelector('.fav-btn');
-            btn.classList.toggle('favorited');
-            btn.innerHTML = favorites.includes(index) ? '❤️' : '🤍';
+            renderItems();
         }
 
+        // ==================== FILTER ====================
         function filterItems(type) {
             document.querySelectorAll('.center-content button').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
+
             const cards = document.querySelectorAll('.game-card');
-            let showing = 0;
             cards.forEach(card => {
                 const index = parseInt(card.dataset.index);
-                const hide = type === 'favorites' && !favorites.includes(index);
-                card.classList.toggle('hidden', hide);
-                if (!hide) showing++;
+                
+                if (type === 'all') {
+                    card.classList.remove('hidden');
+                } else if (type === 'favorites') {
+                    card.classList.toggle('hidden', !favorites.includes(index));
+                }
             });
-            updateShowingCount(showing);
         }
 
+        // ==================== SEARCH ====================
         function searchItems(query) {
             const cards = document.querySelectorAll('.game-card');
-            const q = query.toLowerCase();
-            let showing = 0;
             cards.forEach(card => {
-                const hide = !card.dataset.name.includes(q);
-                card.classList.toggle('hidden', hide);
-                if (!hide) showing++;
+                const name = card.dataset.name;
+                card.classList.toggle('hidden', !name.includes(query.toLowerCase()));
             });
-            updateShowingCount(showing);
         }
 
         // ==================== SETTINGS ====================
@@ -1665,66 +833,107 @@
             document.getElementById('settingsModal').classList.remove('show');
         }
 
-        // ==================== THEME SEARCH ====================
+        // ==================== TAB CLOAK ====================
+        function applyTabCloak() {
+            const title = document.getElementById('tabTitle').value;
+            const icon = document.getElementById('tabIcon').value;
+            
+            document.title = title;
+            document.getElementById('favicon').href = icon;
+            
+            localStorage.setItem('tabTitle', title);
+            localStorage.setItem('tabIcon', icon);
+            
+            alert('✅ Tab cloak applied!');
+        }
+
+        // Load saved tab cloak
+        const savedTitle = localStorage.getItem('tabTitle');
+        const savedIcon = localStorage.getItem('tabIcon');
+        if (savedTitle) {
+            document.title = savedTitle;
+            document.getElementById('tabTitle').value = savedTitle;
+        }
+        if (savedIcon) {
+            document.getElementById('favicon').href = savedIcon;
+            document.getElementById('tabIcon').value = savedIcon;
+        }
+
+        // ==================== COLOR-AWARE THEME SEARCH ====================
         function searchThemes(query) {
-            const q = query.toLowerCase().trim();
-            if (!q) {
-                filteredThemes = [...themes];
-            } else {
-                filteredThemes = themes.filter(theme => {
-                    if (theme.name.toLowerCase().includes(q)) return true;
-                    if (theme.colorTags && theme.colorTags.some(tag => tag.includes(q))) return true;
-                    return false;
-                });
+            query = query.toLowerCase().trim();
+            
+            if (!query) {
+                allThemes = [...themes];
+                renderThemes();
+                return;
             }
+
+            allThemes = themes.filter(theme => {
+                const nameMatch = theme.name.toLowerCase().includes(query);
+                
+                // Check color keywords
+                let colorMatch = false;
+                if (theme.tags) {
+                    colorMatch = theme.tags.some(tag => tag.includes(query));
+                }
+                
+                // Check if query matches any color keyword
+                for (const [color, keywords] of Object.entries(colorKeywords)) {
+                    if (keywords.some(keyword => query.includes(keyword)) || query.includes(color)) {
+                        if (theme.tags && theme.tags.includes(color)) {
+                            colorMatch = true;
+                        }
+                        // Also check theme name for color keywords
+                        if (keywords.some(keyword => theme.name.toLowerCase().includes(keyword))) {
+                            colorMatch = true;
+                        }
+                    }
+                }
+                
+                return nameMatch || colorMatch;
+            });
+            
             renderThemes();
         }
 
+        // ==================== THEMES ====================
         function renderThemes() {
             const grid = document.getElementById('themeGrid');
             const currentTheme = localStorage.getItem('currentTheme') || 0;
-            const fragment = document.createDocumentFragment();
+            grid.innerHTML = '';
 
-            filteredThemes.forEach((theme) => {
+            allThemes.forEach((theme, index) => {
                 const actualIndex = themes.indexOf(theme);
                 const div = document.createElement('div');
                 div.className = 'theme-option' + (actualIndex == currentTheme ? ' active' : '');
                 div.style.background = `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.accent})`;
                 div.textContent = theme.name;
                 div.onclick = () => applyTheme(actualIndex);
-                fragment.appendChild(div);
+                grid.appendChild(div);
             });
-
-            grid.innerHTML = '';
-            grid.appendChild(fragment);
         }
 
         function applyTheme(index) {
             const theme = themes[index];
             const root = document.documentElement;
+            
             root.style.setProperty('--bg-primary', theme.colors.primary);
             root.style.setProperty('--bg-secondary', theme.colors.secondary);
             root.style.setProperty('--bg-tertiary', theme.colors.tertiary);
             root.style.setProperty('--accent', theme.colors.accent);
             root.style.setProperty('--text', theme.colors.text);
+            
             localStorage.setItem('currentTheme', index);
             renderThemes();
         }
 
+        // Load saved theme
         const savedTheme = localStorage.getItem('currentTheme');
-        if (savedTheme) applyTheme(parseInt(savedTheme));
-
-        // ==================== BACK TO TOP ====================
-        window.addEventListener('scroll', () => {
-            document.getElementById('backToTop').classList.toggle('show', window.scrollY > 300);
-        }, { passive: true });
-
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        if (savedTheme) applyTheme(savedTheme);
 
         // ==================== INIT ====================
-        requestAnimationFrame(renderItems);
+        renderItems();
     </script>
 
 </body>
